@@ -1,0 +1,25 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local secrets and editor settings
+.env
+.env.*
+.idea/
+.vscode/
+
+# Runtime and temporary outputs
+summer_school_practice_v1.0/student_package/output/
+summer_school_practice_v1.0/test_records/env_check_*/
+
+# Release archives are published after version freeze
+*.zip
+
+# Operating system and Office temporary files
+.DS_Store
+Thumbs.db
+~$*.docx
+~$*.xlsx

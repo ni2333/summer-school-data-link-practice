@@ -1,0 +1,43 @@
+# M1—M6学生提交清单
+
+## M1
+
+- [ ] 系统处理流程图
+- [ ] 接口、通信与风险说明
+
+## M2
+
+- [ ] Parser与Codec代码
+- [ ] 二进制消息文件
+- [ ] 解码结果
+- [ ] `validation_log.csv`
+- [ ] roundtrip报告
+
+## M3
+
+- [ ] 批量解码结果
+- [ ] `track_table.csv`
+- [ ] `current_situation.csv`
+- [ ] SQLite文件/查询结果或航迹图（选做）
+
+## M4
+
+- [ ] `llm_mapping_candidate.csv`
+- [ ] `verified_mapping_table.csv`
+- [ ] `unified_situation.ndjson`
+- [ ] AI辅助映射核验说明
+
+## M5
+
+- [ ] 一致性检查代码
+- [ ] `alert_log.csv`
+- [ ] `quality_situation.csv`
+- [ ] 异常结果说明
+
+## M6
+
+- [ ] 综合运行包、关键成果和README
+- [ ] 不超过5页的成果展示材料
+- [ ] 已记录官方检查点使用情况
+- [ ] 所有JSON、CSV和NDJSON均能重新读取
+- [ ] 从空`output`目录能够按README重新运行

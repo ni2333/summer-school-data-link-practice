@@ -14,6 +14,9 @@ __pycache__/
 # Runtime and temporary outputs
 summer_school_practice_v1.0/student_package/output/
 summer_school_practice_v1.0/test_records/env_check_*/
+summer_school_practice_v1.0/test_records/.last_trial_output/
+summer_school_practice_v1.0/test_records/latest_reference_run/
+summer_school_practice_v1.0/test_records/latest_trial_report.json
 
 # Release archives are published after version freeze
 *.zip

@@ -1,1 +1,19 @@
 case_id,module,input_file,record_or_frame_no,purpose,expected_valid,expected_error_or_rule,expected_output,owner/reviewer
+M2-001,M2,raw_states.json,1,所有常用字段有效,true,,41字节正常帧且往返误差在量化单位内,B/C
+M2-002,M2,raw_states.json,2,真实物理零值与前导0,true,,有效位为1且不得恢复为None,B/C
+M2-003,M2,raw_states.json,3,呼号缺失与高度/时间来源回退,true,,callsign为空且alt_type/time_source正确,B/C
+M2-004,M2,raw_states.json,4,必需时间缺失,false,REQUIRED_FIELD_MISSING,validation_log包含timestamp,B/C
+M2-005,M2,raw_states.json,5,航向等于360越界,false,OUT_OF_RANGE,validation_log包含heading,B/C
+M2-006,M2,自动化构造帧,1,校验和损坏,false,CHECKSUM_ERROR,message_valid=false,B/C
+M2-007,M2,自动化构造帧,1,22位经纬度容器保留位非0,false,RESERVED_BITS_ERROR,message_valid=false,B/C
+M2-008,M2,自动化构造帧,1,有效位0但占位字节非0,false,FLAG_VALUE_INCONSISTENCY,message_valid=false,B/C
+M3-001,M3,partner_messages_multitime.bin,1-9,边界对齐固定帧流,true,,9帧/3目标/每条航迹3点,B/C
+M3-002,M3,partner_messages_incomplete_tail.bin,10,不完整尾帧,false,LENGTH_ERROR,保留9帧并忽略3字节尾部,B/C
+M4-001,M4,pre_generated_mapping_candidate.csv,3-4,经纬度候选交换,false,人工核验,正式映射修正层次,C/B
+M4-002,M4,pre_generated_mapping_candidate.csv,5,高度遗漏负1000偏置,false,人工核验,正式规则code-1000,C/B
+M4-003,M4,pre_generated_mapping_candidate.csv,7,时间回退误判为时间无效,false,人工核验,time_valid仍由正timestamp决定,C/B
+M5-001,M5,anomaly_cases.csv,2,位置缺失,false,R1 POSITION_MISSING,HIGH告警,C/B
+M5-002,M5,anomaly_cases.csv,3,时间延迟,false,R2 DATA_DELAYED,MEDIUM告警,C/B
+M5-003,M5,anomaly_cases.csv,4-5,联合键重复,false,R3 DUPLICATE_RECORD,两条MEDIUM告警,C/B
+M5-004,M5,anomaly_cases.csv,6,heading等于360,false,R4 HEADING_OUT_OF_RANGE,MEDIUM告警,C/B
+M6-001,M6,student_package,all,完整参考链,true,,14项关键成果且冻结指标全部匹配,A/B+C

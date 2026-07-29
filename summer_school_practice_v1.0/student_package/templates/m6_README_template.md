@@ -10,7 +10,7 @@
 ## 安装与运行
 
 ```powershell
-python src_skeleton\m6\run_all.py
+python src_skeleton\run_all.py
 ```
 
 ## 程序入口

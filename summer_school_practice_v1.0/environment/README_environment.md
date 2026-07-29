@@ -22,11 +22,24 @@ python -m pip install -r environment\requirements.txt
 ## 检查环境
 
 ```powershell
-python environment\environment_check.py
-python environment\run_smoke_test.py
+python environment\run_all_checks.py
 ```
 
-两个命令都应输出总结，并以退出码0结束。
+该命令会依次执行环境检查、文件冒烟测试、协议自动化测试和M2-M6端到端试跑；全部应以退出码0结束。
+
+## 一键部署
+
+Windows PowerShell：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File environment\setup.ps1
+```
+
+Linux/macOS：
+
+```bash
+bash environment/setup.sh
+```
 
 ## 离线环境
 

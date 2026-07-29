@@ -15,6 +15,9 @@ class SmokeResult:
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "smoke_data"
+PROJECT_ROOT = ROOT.parent
+PRACTICE_DATA = PROJECT_ROOT / "student_package" / "data"
+SCHEMA = PROJECT_ROOT / "student_package" / "schema"
 
 
 def read_json() -> SmokeResult:
@@ -58,8 +61,29 @@ def read_ndjson() -> SmokeResult:
         return SmokeResult("NDJSON读取", False, str(exc))
 
 
+def read_practice_inputs() -> SmokeResult:
+    try:
+        raw = json.loads((PRACTICE_DATA / "raw_states.json").read_text(encoding="utf-8"))
+        sample_size = (PRACTICE_DATA / "partner_messages_sample.bin").stat().st_size
+        multitime_size = (PRACTICE_DATA / "partner_messages_multitime.bin").stat().st_size
+        with (PRACTICE_DATA / "anomaly_cases.csv").open("r", encoding="utf-8-sig", newline="") as handle:
+            anomaly_rows = list(csv.DictReader(handle))
+        unified = json.loads((SCHEMA / "unified_model.json").read_text(encoding="utf-8"))
+        passed = (
+            len(raw.get("states", [])) == 5
+            and sample_size == 3 * 41
+            and multitime_size == 9 * 41
+            and len(anomaly_rows) == 6
+            and "quality" in unified
+        )
+        detail = f"raw=5，sample={sample_size}字节，multitime={multitime_size}字节，anomaly={len(anomaly_rows)}"
+        return SmokeResult("M1-M5正式输入", passed, detail)
+    except Exception as exc:
+        return SmokeResult("M1-M5正式输入", False, str(exc))
+
+
 def main() -> int:
-    results = [read_json(), read_binary(), read_csv(), read_ndjson()]
+    results = [read_json(), read_binary(), read_csv(), read_ndjson(), read_practice_inputs()]
     for result in results:
         marker = "PASS" if result.passed else "FAIL"
         print(f"[{marker}] {result.name}：{result.detail}")

@@ -5,6 +5,7 @@ import importlib.metadata
 import importlib.util
 import json
 import platform
+import re
 import sqlite3
 import sys
 import uuid
@@ -13,7 +14,6 @@ from pathlib import Path
 
 
 MIN_PYTHON = (3, 10)
-REQUIRED_MODULES = ("pandas", "matplotlib")
 
 
 @dataclass
@@ -32,15 +32,22 @@ def check_python() -> CheckResult:
     )
 
 
-def check_module(module_name: str) -> CheckResult:
+def check_module(
+    module_name: str,
+    minimum: tuple[int, ...],
+    maximum_exclusive: tuple[int, ...],
+) -> CheckResult:
     try:
         specification = importlib.util.find_spec(module_name)
         if specification is None:
             return CheckResult(f"依赖 {module_name}", False, "未找到可导入模块")
         version = importlib.metadata.version(module_name)
+        parts = tuple(int(part) for part in re.findall(r"\d+", version)[:3])
     except Exception as exc:
         return CheckResult(f"依赖 {module_name}", False, f"检测失败：{exc}")
-    return CheckResult(f"依赖 {module_name}", True, f"已安装，版本 {version}")
+    passed = parts >= minimum and parts < maximum_exclusive
+    requirement = f">={'.'.join(map(str, minimum))}, <{'.'.join(map(str, maximum_exclusive))}"
+    return CheckResult(f"依赖 {module_name}", passed, f"已安装 {version}，要求 {requirement}")
 
 
 def check_utf8_and_write(workspace: Path) -> CheckResult:
@@ -96,10 +103,26 @@ def check_paths(project_root: Path) -> CheckResult:
         project_root / "test_records",
         project_root / "manifest.csv",
         project_root / "release_notes.md",
+        project_root / "student_package" / "data" / "raw_states.json",
+        project_root / "student_package" / "data" / "partner_messages_sample.bin",
+        project_root / "student_package" / "data" / "partner_messages_multitime.bin",
+        project_root / "student_package" / "data" / "anomaly_cases.csv",
+        project_root / "student_package" / "schema" / "teaching_message_spec.md",
+        project_root / "student_package" / "schema" / "unified_model.json",
+        project_root / "student_package" / "guides" / "opensky_interface_summary.md",
+        project_root / "student_package" / "guides" / "m1_guided_questions.md",
+        project_root / "ta_reference_package" / "checkpoints" / "official_decoded_multitime.csv",
+        project_root / "ta_reference_package" / "checkpoints" / "official_current_situation.csv",
+        project_root / "ta_reference_package" / "reference_implementation" / "run_all_reference.py",
+        project_root / "environment" / "run_full_trial.py",
+        project_root / "tests" / "test_reference_pipeline.py",
     )
     missing = [str(path) for path in required if not path.exists()]
     if missing:
         return CheckResult("正式目录结构", False, "缺少：" + "；".join(missing))
+    student_ta_leaks = list((project_root / "student_package").rglob("*reference_implementation*"))
+    if student_ta_leaks:
+        return CheckResult("正式目录结构", False, "学生包中发现助教参考实现路径")
     return CheckResult("正式目录结构", True, f"根目录：{project_root}")
 
 
@@ -119,7 +142,12 @@ def main() -> int:
     project_root = args.project_root.resolve()
     writable_root = project_root / "test_records"
     results = [check_python()]
-    results.extend(check_module(name) for name in REQUIRED_MODULES)
+    results.extend(
+        [
+            check_module("pandas", (2, 0), (3, 0)),
+            check_module("matplotlib", (3, 7), (4, 0)),
+        ]
+    )
     results.extend(
         [
             check_utf8_and_write(writable_root),

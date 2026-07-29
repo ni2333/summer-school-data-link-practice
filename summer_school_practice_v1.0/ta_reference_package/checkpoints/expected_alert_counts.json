@@ -1,0 +1,11 @@
+{
+  "total_alerts": 5,
+  "HIGH": 1,
+  "MEDIUM": 4,
+  "by_type": {
+    "DATA_DELAYED": 1,
+    "DUPLICATE_RECORD": 2,
+    "HEADING_OUT_OF_RANGE": 1,
+    "POSITION_MISSING": 1
+  }
+}

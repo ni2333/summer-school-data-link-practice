@@ -1,0 +1,12 @@
+issue_id,stage,severity,problem,evidence,fix,status,verification
+PKG-001,初稿审查,BLOCKER,正式目录缺少学生data/schema与助教checkpoints/reference_implementation/expected_results,environment_check初始4/6,补齐学生输入与Schema、助教参考实现/检查点/预期结果,FIXED,environment_check 6/6
+ENV-001,环境部署,BLOCKER,独立环境未安装matplotlib,environment_check依赖检查失败,建立.venv并按requirements安装pandas 2.3.3与matplotlib 3.11.1,FIXED,setup.ps1及run_all_checks 5/5
+ENV-002,环境部署,HIGH,Windows PowerShell 5无法可靠解析无BOM中文setup.ps1,首次setup.ps1在右花括号处ParserError,将PowerShell运行提示和异常文本改为ASCII,FIXED,setup.ps1完成且退出码0
+DOC-001,学生说明,MEDIUM,M6 README模板命令指向不存在的src_skeleton/m6/run_all.py,模板原始命令,改为src_skeleton/run_all.py,FIXED,路径存在检查
+DOC-002,学生说明,LOW,提交清单写成果展示不超过5页但最终手册要求6页,最终修订稿10.5与原清单,统一改为不超过6页,FIXED,文本复核
+DATA-001,M2-M5,BLOCKER,无raw JSON/二进制/异常样例/字段字典/统一模型,仓库初稿仅含smoke_data,生成冻结小数据集与配套Schema,FIXED,数据生成脚本与全链读取
+REF-001,M2-M6,BLOCKER,无参考实现和官方检查点,release_notes明确尚未集成,新增完整参考链、M2/M3/M4/M5检查点和预期结果,FIXED,run_full_trial全部PASS
+TEST-001,自动化测试,MEDIUM,真实0值测试错误要求22位定点往返精确等于0,首轮9项测试1项失败,按手册改为一个量化单位内并继续检查有效位为1,FIXED,最终10/10自动化测试通过
+TEST-002,M2边界,HIGH,小于360但量化后等于360.00的航向会生成接收端越界帧,代码复核heading=359.999,编码端拒绝量化码大于等于36000并新增边界测试,FIXED,航向量化上边界测试通过
+TRIAL-001,正式试跑,BLOCKER,初稿只有文件读取冒烟测试没有M1-M6试跑,run_smoke_test仅4类文件读取,新增run_all_reference/run_full_trial/run_all_checks与冻结指标,FIXED,端到端14项成果/9帧/3目标/5告警/SQLite 9行
+OPS-001,管理台账,MEDIUM,关键里程碑和看板公式在原OOXML中包含前导等号导致部分解析器显示NAME错误,台账sheet2/sheet5公式XML以等号开头,不改源台账；建议项目负责人另行修复公式缓存与OOXML写法,EXTERNAL,已用原始XML复核并记录

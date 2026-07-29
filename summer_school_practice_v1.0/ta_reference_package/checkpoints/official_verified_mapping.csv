@@ -1,0 +1,8 @@
+﻿source_format,input_field,unified_field,mapping_rule,unit_conversion,null_strategy,evidence,verified
+OpenSky,target_id,track_id,六位小写十六进制字符串,none,required,source_field_definitions.md,True
+OpenSky,latest_time,timestamp,直接映射,seconds,required,source_field_definitions.md,True
+TeachingLink,latitude_code+validity_flags.bit0,position.lat,有效时code/(2^22-1)*180-90,degree,无效位映射null,teaching_message_spec.md,True
+TeachingLink,longitude_code+validity_flags.bit1,position.lon,有效时code/(2^22-1)*360-180,degree,无效位映射null,teaching_message_spec.md,True
+TeachingLink,altitude_code+validity_flags.bit2,position.alt,有效时code-1000,meter,无效位映射null,teaching_message_spec.md,True
+TeachingLink,status_flags.bit2,quality.time_source,"0=position_time,1=last_contact_fallback",none,required,teaching_message_spec.md,True
+TeachingLink,message_valid,quality.message_valid,完整帧接收判据,none,required,teaching_message_spec.md,True

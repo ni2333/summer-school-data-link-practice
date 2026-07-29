@@ -1,0 +1,7 @@
+﻿field,source,code,decoded
+latitude,-90.0,0,-90.0
+latitude,90.0,4194303,90.0
+longitude,-180.0,0,-180.0
+longitude,180.0,4194303,180.0
+heading,0.0,0,0.0
+vertical_rate,-327.68,0,-327.68

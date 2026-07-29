@@ -12,7 +12,7 @@ def prepare_output_directory() -> None:
 
 
 def parse() -> None:
-    raise NotImplementedError("TODO：接入M2 OpenSky解析实现。")
+    raise NotImplementedError("TODO：接入M2 OpenSky解析实现，并输出结构化解析结果。")
 
 
 def encode() -> None:
@@ -36,7 +36,7 @@ def check_quality() -> None:
 
 
 def export_results() -> None:
-    raise NotImplementedError("TODO：整理M6关键成果和README。")
+    raise NotImplementedError("TODO：整理M6关键成果和README；不得把助教检查点当成本模块成果。")
 
 
 def run_pipeline() -> None:

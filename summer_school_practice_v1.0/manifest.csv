@@ -1,8 +1,8 @@
 path,version,owner,purpose,student_public,status
-manifest.csv,1.0.0-rc1,A,文件版本清单,false,ready
-release_notes.md,1.0.0-rc1,A,版本变更记录,false,ready
+manifest.csv,1.0.0-rc2,A,文件版本清单,false,ready
+release_notes.md,1.0.0-rc2,A,版本变更记录,false,ready
 environment/requirements.txt,1.0.0-rc1,A,统一Python依赖,true,ready
-environment/README_environment.md,1.0.0-rc1,A,环境安装与排错,true,ready
+environment/README_environment.md,1.0.0-rc2,A,唯一环境安装与验证说明,true,ready
 environment/setup.ps1,1.0.0-rc1,A,Windows一键部署,true,ready
 environment/setup.sh,1.0.0-rc1,A,Linux/macOS一键部署,true,ready
 environment/environment_check.py,1.0.0-rc1,A,环境检查工具,true,ready
@@ -10,7 +10,7 @@ environment/run_smoke_test.py,1.0.0-rc1,A,文件读取冒烟测试,true,ready
 environment/run_all_checks.py,1.0.0-rc1,A,统一检查入口,false,ready
 environment/run_full_trial.py,1.0.0-rc1,A,端到端参考试跑,false,ready
 environment/verify_manifest.py,1.0.0-rc1,A,发布清单与学生包边界检查,false,ready
-student_package/README.md,1.0.0-rc1,A,学生包入口,true,ready
+student_package/README.md,1.0.0-rc2,A,M1-M6学生任务入口,true,ready
 student_package/data/raw_states.json,1.0.0-rc1,B,M2离线OpenSky输入,true,ready
 student_package/data/partner_messages_sample.bin,1.0.0-rc1,B,M2消息样例,true,ready
 student_package/data/partner_messages_multitime.bin,1.0.0-rc1,B,M3九帧输入,true,ready
@@ -44,11 +44,11 @@ student_package/templates/m4_review_note.md,1.0.0-rc1,C,M4核验说明模板,tru
 student_package/templates/alert_log.csv,1.0.0-rc1,C,M5告警模板,true,ready
 student_package/templates/quality_situation.csv,1.0.0-rc1,C,M5质量态势模板,true,ready
 student_package/templates/m5_result_note.md,1.0.0-rc1,C,M5结果说明模板,true,ready
-student_package/templates/m6_README_template.md,1.0.0-rc1,A,M6运行说明模板,true,ready
+student_package/templates/m6_README_template.md,1.0.0-rc2,A,M6独立环境运行说明模板,true,ready
 student_package/templates/m6_presentation_outline.md,1.0.0-rc1,A,M6六页展示提纲,true,ready
 student_package/templates/checkpoint_switch.md,1.0.0-rc1,A,官方检查点使用规则,true,ready
 student_package/templates/submission_checklist.md,1.0.0-rc1,A,学生提交清单,true,ready
-ta_reference_package/README.md,1.0.0-rc1,A,助教包入口,false,ready
+ta_reference_package/README.md,1.0.0-rc2,A,助教参考链与检查点入口,false,ready
 ta_reference_package/reference_implementation/practice_reference.py,1.0.0-rc1,B+C,参考核心实现,false,ready
 ta_reference_package/reference_implementation/generate_package_assets.py,1.0.0-rc1,B+C,数据与检查点生成器,false,ready
 ta_reference_package/reference_implementation/run_all_reference.py,1.0.0-rc1,A,端到端参考入口,false,ready
@@ -62,5 +62,6 @@ ta_reference_package/expected_results/m1_reference_flow.md,1.0.0-rc1,B,M1内部�
 ta_reference_package/case_manifest_internal.csv,1.0.0-rc1,A,内部case索引,false,ready
 tests/test_reference_pipeline.py,1.0.0-rc1,A,协议与流程自动化测试,false,ready
 test_records/ta_work_assignment.md,1.0.0-rc1,A,三位助教分工,false,ready
-test_records/issue_log.csv,1.0.0-rc1,A,问题闭环台账,false,ready
+test_records/issue_log.csv,1.0.0-rc2,A,问题闭环台账,false,ready
 test_records/end_to_end_trial_2026-07-29.md,1.0.0-rc1,A,完整试跑记录,false,ready
+test_records/a_environment_trial_2026-07-29.md,1.0.0-rc2,A,A独立环境与正式包验收记录,false,ready

@@ -9,8 +9,10 @@
 
 ## 安装与运行
 
+先按课程包 `environment/README_environment.md` 建立独立 `.venv`。在课程包根目录清空 `student_package/output/` 后执行：
+
 ```powershell
-python src_skeleton\run_all.py
+.\.venv\Scripts\python.exe student_package\src_skeleton\run_all.py
 ```
 
 ## 程序入口

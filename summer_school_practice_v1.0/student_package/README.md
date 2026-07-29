@@ -1,17 +1,10 @@
 # 数据链软件暑期学校学生实践包
 
-版本：`1.0.0-rc1`。本包包含 M1-M6 必做主线所需的离线数据、Schema、模板、提示和代码骨架；不包含助教参考实现、内部 case、官方答案或预期告警数量。
+版本：`1.0.0-rc2`。本包包含 M1-M6 必做主线所需的离线数据、Schema、模板、提示和代码骨架；不包含助教参考实现、内部 case、官方答案或预期告警数量。
 
 ## 开始前
 
-在项目根目录完成环境部署并确认全部检查通过：
-
-```powershell
-.\.venv\Scripts\python.exe environment\environment_check.py
-.\.venv\Scripts\python.exe environment\run_smoke_test.py
-```
-
-统一环境为 Python 3.10+、pandas 2.x、matplotlib 3.7-3.x，以及标准库 `json/csv/datetime/sqlite3/pathlib`。SQLite 为选做；课堂必做任务不访问实时 OpenSky。
+先按 `../environment/README_environment.md` 在正式课程包根目录建立独立 `.venv`，并确认环境检查和文件冒烟测试通过。环境安装、验证命令和不可用时的降级路径统一以该文件为准。
 
 ## M1 体系理解
 
@@ -50,7 +43,7 @@
 
 ## M6 综合演练
 
-将 M2-M5 本人代码接入 `src_skeleton/run_all.py`，从空 `output/` 目录执行。README 使用 `templates/m6_README_template.md`，并记录是否启用 SQLite、候选映射来源和官方检查点使用情况。
+将 M2-M5 本人代码接入 `src_skeleton/run_all.py`，从空 `output/` 目录执行。README 使用 `templates/m6_README_template.md`，并记录是否启用 SQLite、候选映射来源和官方检查点使用情况；运行命令见该模板。
 
 ## 官方检查点
 

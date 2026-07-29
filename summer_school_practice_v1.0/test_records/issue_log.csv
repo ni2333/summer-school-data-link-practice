@@ -10,3 +10,4 @@ TEST-001,自动化测试,MEDIUM,真实0值测试错误要求22位定点往返精
 TEST-002,M2边界,HIGH,小于360但量化后等于360.00的航向会生成接收端越界帧,代码复核heading=359.999,编码端拒绝量化码大于等于36000并新增边界测试,FIXED,航向量化上边界测试通过
 TRIAL-001,正式试跑,BLOCKER,初稿只有文件读取冒烟测试没有M1-M6试跑,run_smoke_test仅4类文件读取,新增run_all_reference/run_full_trial/run_all_checks与冻结指标,FIXED,端到端14项成果/9帧/3目标/5告警/SQLite 9行
 OPS-001,管理台账,MEDIUM,关键里程碑和看板公式在原OOXML中包含前导等号导致部分解析器显示NAME错误,台账sheet2/sheet5公式XML以等号开头,不改源台账；建议项目负责人另行修复公式缓存与OOXML写法,EXTERNAL,已用原始XML复核并记录
+DOC-003,文档整理,MEDIUM,仓库入口与学生入口重复环境安装信息且助教命令使用系统Python,五类README交叉复核,按受众拆分README职责并以环境说明作为唯一安装来源且正式命令显式使用.venv,FIXED,文档链接复核和run_all_checks全量验证

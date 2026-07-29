@@ -1,6 +1,6 @@
 # 助教内部参考包
 
-本目录不得发给学生。
+版本：`1.0.0-rc2`。本目录仅供助教进行参考链复验和按节点发布检查点，不得发给学生。环境建立和全量验证统一见 `../environment/README_environment.md`。
 
 ## 组成
 
@@ -13,7 +13,7 @@
 ## 参考链运行
 
 ```powershell
-python ta_reference_package\reference_implementation\run_all_reference.py --sqlite
+.\.venv\Scripts\python.exe ta_reference_package\reference_implementation\run_all_reference.py --sqlite
 ```
 
 固定预期：原始 5 条状态中 3 条可编码、2 条解析错误；多时间片 9 帧、3 个目标、每条航迹 3 点；M5 共 5 条告警（HIGH 1、MEDIUM 4）；SQLite 写入 9 行。

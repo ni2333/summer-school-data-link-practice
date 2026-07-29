@@ -1,5 +1,24 @@
 # 发布记录
 
+## 1.0.0-rc2 — 2026-07-29
+
+### 助教 A 集成整理
+
+- 明确五类 README 的受众和职责：仓库导航、统一环境、学生任务、助教参考、M6 提交模板各自独立，删除重复安装说明。
+- 将 `environment/README_environment.md` 作为唯一环境说明；正式运行命令显式使用课程包 `.venv`，不依赖本机已有第三方包。
+- 更新文件版本清单、学生/助教包入口、M6 运行模板和问题闭环记录。
+
+### A 独立验收
+
+- Windows 11、Python 3.12.7 独立 `.venv`，`include-system-site-packages = false`。
+- pandas 2.3.3、matplotlib 3.11.1；环境 6/6、冒烟 5/5、清单 3/3、自动化测试 10/10、M2-M6 端到端试跑全部通过。
+- 详细记录见 `test_records/a_environment_trial_2026-07-29.md`。
+
+### 发布边界
+
+- 当前仍为助教联调候选版；B/C 交叉课堂身份计时试跑完成后，由 A 汇总问题并执行最终冻结。
+- 学生发布时必须排除 `ta_reference_package/` 和 `test_records/`。
+
 ## 1.0.0-rc1 — 2026-07-29
 
 ### 完成

@@ -10,6 +10,10 @@ environment/run_smoke_test.py,1.0.0-rc3,A,正式输入与M4候选冒烟测试,tr
 environment/run_all_checks.py,1.0.0-rc3,A,必做和选做统一检查入口,false,ready
 environment/run_full_trial.py,1.0.0-rc3,A,CSV与SQLite双路径端到端试跑,false,ready
 environment/verify_manifest.py,1.0.0-rc1,A,发布清单与学生包边界检查,false,ready
+environment/smoke_data/sample.json,1.0.0-rc1,A,JSON环境冒烟样例,true,ready
+environment/smoke_data/sample_frame.bin,1.0.0-rc1,A,41字节二进制环境冒烟样例,true,ready
+environment/smoke_data/sample.csv,1.0.0-rc1,A,CSV环境冒烟样例,true,ready
+environment/smoke_data/sample.ndjson,1.0.0-rc1,A,NDJSON环境冒烟样例,true,ready
 student_package/README.md,1.0.0-rc3,A,M1-M6学生任务入口,true,ready
 student_package/data/raw_states.json,1.0.0-rc1,B,M2离线OpenSky输入,true,ready
 student_package/data/partner_messages_sample.bin,1.0.0-rc1,B,M2消息样例,true,ready
@@ -59,9 +63,16 @@ ta_reference_package/checkpoints/official_verified_mapping.csv,1.0.0-rc1,C,M4正
 ta_reference_package/checkpoints/unified_message_reference.ndjson,1.0.0-rc1,C,M4统一消息样例,false,ready
 ta_reference_package/checkpoints/expected_alert_counts.json,1.0.0-rc1,C,M5告警数量,false,ready
 ta_reference_package/expected_results/m1_reference_flow.md,1.0.0-rc1,B,M1内部正确流程,false,ready
+ta_reference_package/expected_results/boundary_value_reference.csv,1.0.0-rc1,B,M2边界值参考,false,ready
+ta_reference_package/expected_results/sample_frame_reference.csv,1.0.0-rc1,B,M2样例帧参考,false,ready
+ta_reference_package/expected_results/sample_decoded_reference.csv,1.0.0-rc1,B,M2样例解码参考,false,ready
+ta_reference_package/expected_results/expected_alert_log.csv,1.0.0-rc1,C,M5预期告警结果,false,ready
+ta_reference_package/expected_results/expected_quality_situation.csv,1.0.0-rc1,C,M5预期质量态势,false,ready
+ta_reference_package/test_cases/partner_messages_incomplete_tail.bin,1.0.0-rc1,B,M3不完整尾帧内部样例,false,ready
 ta_reference_package/case_manifest_internal.csv,1.0.0-rc1,A,内部case索引,false,ready
 tests/test_reference_pipeline.py,1.0.0-rc1,A,协议与流程自动化测试,false,ready
 test_records/ta_work_assignment.md,1.0.0-rc1,A,三位助教分工,false,ready
+test_records/module_trial_record_template.md,1.0.0-rc1,A,模块交叉试跑记录模板,false,ready
 test_records/issue_log.csv,1.0.0-rc3,A,问题闭环台账,false,ready
 test_records/end_to_end_trial_2026-07-29.md,1.0.0-rc1,A,完整试跑记录,false,ready
 test_records/a_environment_trial_2026-07-29.md,1.0.0-rc2,A,A独立环境与正式包验收记录,false,ready

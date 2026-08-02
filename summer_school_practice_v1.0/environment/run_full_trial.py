@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import sys
@@ -13,30 +14,41 @@ sys.path.insert(0, str(REFERENCE))
 from run_all_reference import run  # noqa: E402
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="验证M2-M6必做CSV链和SQLite选做路径。")
+    parser.add_argument("--sqlite", action="store_true", help="同时生成并核对SQLite选做结果")
+    return parser.parse_args()
+
+
 def csv_rows(path: Path) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         return list(csv.DictReader(handle))
 
 
 def main() -> int:
-    output = ROOT / "test_records" / ".last_trial_output"
+    args = parse_args()
+    mode = "sqlite" if args.sqlite else "csv"
+    output = ROOT / "test_records" / f".last_trial_output_{mode}"
     checks: list[dict[str, object]] = []
 
     def check(name: str, passed: bool, detail: str) -> None:
         checks.append({"name": name, "passed": passed, "detail": detail})
 
     try:
-        summary = run(ROOT / "student_package", output, use_sqlite=True)
-        check("端到端参考链", True, "M2-M6运行完成")
+        summary = run(ROOT / "student_package", output, use_sqlite=args.sqlite)
+        detail = "M2-M6运行完成并启用SQLite" if args.sqlite else "M2-M6必做CSV链运行完成"
+        check("端到端参考链", True, detail)
     except Exception as exc:
         summary = {}
         check("端到端参考链", False, repr(exc))
 
     required_outputs = [
         "parsed_open_states.csv", "encoded_messages.bin", "decoded_partner_states.csv", "validation_log.csv",
-        "roundtrip_report.csv", "decoded_multitime.csv", "track_table.csv", "current_situation.csv", "states.db",
+        "roundtrip_report.csv", "decoded_multitime.csv", "track_table.csv", "current_situation.csv",
         "verified_mapping_table.csv", "unified_situation.ndjson", "alert_log.csv", "quality_situation.csv", "run_summary.json",
     ]
+    if args.sqlite:
+        required_outputs.append("states.db")
     missing = [name for name in required_outputs if not (output / name).exists()]
     check("M6关键成果齐全", not missing, "缺少：" + ", ".join(missing) if missing else f"{len(required_outputs)}项齐全")
 
@@ -81,7 +93,7 @@ def main() -> int:
         "alerts": 5,
         "high_alerts": 1,
         "medium_alerts": 4,
-        "sqlite_rows": 9,
+        "sqlite_rows": 9 if args.sqlite else None,
     }
     summary_ok = all(summary.get(key) == value for key, value in expected_summary.items())
     check("冻结指标", summary_ok, json.dumps(summary, ensure_ascii=False, sort_keys=True))
@@ -93,7 +105,7 @@ def main() -> int:
         "checks": checks,
         "passed": all(item["passed"] for item in checks),
     }
-    report_path = ROOT / "test_records" / "latest_trial_report.json"
+    report_path = ROOT / "test_records" / f"latest_trial_report_{mode}.json"
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     for item in checks:
         print(f"[{'PASS' if item['passed'] else 'FAIL'}] {item['name']}：{item['detail']}")

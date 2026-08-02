@@ -18,6 +18,7 @@ DATA = ROOT / "smoke_data"
 PROJECT_ROOT = ROOT.parent
 PRACTICE_DATA = PROJECT_ROOT / "student_package" / "data"
 SCHEMA = PROJECT_ROOT / "student_package" / "schema"
+MAPPING_CANDIDATE = PROJECT_ROOT / "student_package" / "reference" / "pre_generated_mapping_candidate.csv"
 
 
 def read_json() -> SmokeResult:
@@ -82,8 +83,34 @@ def read_practice_inputs() -> SmokeResult:
         return SmokeResult("M1-M5正式输入", False, str(exc))
 
 
+def read_mapping_candidate() -> SmokeResult:
+    required_fields = {
+        "source_format",
+        "input_field",
+        "candidate_unified_field",
+        "candidate_rule",
+        "confidence",
+        "review_note",
+    }
+    try:
+        with MAPPING_CANDIDATE.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.DictReader(handle)
+            rows = list(reader)
+            fields = set(reader.fieldnames or [])
+        complete_rows = all(
+            row.get("source_format", "").strip()
+            and row.get("input_field", "").strip()
+            and row.get("candidate_unified_field", "").strip()
+            for row in rows
+        )
+        passed = required_fields.issubset(fields) and bool(rows) and complete_rows
+        return SmokeResult("M4预生成候选", passed, f"{MAPPING_CANDIDATE.name}，候选数={len(rows)}")
+    except Exception as exc:
+        return SmokeResult("M4预生成候选", False, str(exc))
+
+
 def main() -> int:
-    results = [read_json(), read_binary(), read_csv(), read_ndjson(), read_practice_inputs()]
+    results = [read_json(), read_binary(), read_csv(), read_ndjson(), read_practice_inputs(), read_mapping_candidate()]
     for result in results:
         marker = "PASS" if result.passed else "FAIL"
         print(f"[{marker}] {result.name}：{result.detail}")

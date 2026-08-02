@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import csv
+import importlib
 import json
 import math
-import sqlite3
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -454,6 +454,10 @@ def build_current_situation(records: Iterable[dict[str, Any]]) -> list[dict[str,
 
 
 def save_records_to_sqlite(records: Iterable[dict[str, Any]], db_path: Path, schema_path: Path) -> int:
+    try:
+        sqlite3 = importlib.import_module("sqlite3")
+    except ImportError as exc:
+        raise RuntimeError("当前Python不提供SQLite；请使用CSV必做路径") from exc
     db_path.parent.mkdir(parents=True, exist_ok=True)
     if db_path.exists():
         db_path.unlink()

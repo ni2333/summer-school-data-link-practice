@@ -6,7 +6,6 @@ import importlib.util
 import json
 import platform
 import re
-import sqlite3
 import sys
 import uuid
 from dataclasses import dataclass
@@ -21,6 +20,7 @@ class CheckResult:
     name: str
     passed: bool
     detail: str
+    required: bool = True
 
 
 def check_python() -> CheckResult:
@@ -50,6 +50,31 @@ def check_module(
     return CheckResult(f"依赖 {module_name}", passed, f"已安装 {version}，要求 {requirement}")
 
 
+def check_virtual_environment(project_root: Path) -> CheckResult:
+    expected_prefix = (project_root / ".venv").resolve()
+    actual_prefix = Path(sys.prefix).resolve()
+    config_path = expected_prefix / "pyvenv.cfg"
+    include_system_packages = None
+    try:
+        for line in config_path.read_text(encoding="utf-8").splitlines():
+            key, separator, value = line.partition("=")
+            if separator and key.strip().lower() == "include-system-site-packages":
+                include_system_packages = value.strip().lower()
+                break
+    except OSError as exc:
+        return CheckResult("独立虚拟环境", False, f"无法读取 {config_path}：{exc}")
+    passed = (
+        sys.prefix != sys.base_prefix
+        and actual_prefix == expected_prefix
+        and include_system_packages == "false"
+    )
+    detail = (
+        f"当前={actual_prefix}；要求={expected_prefix}；"
+        f"include-system-site-packages={include_system_packages}"
+    )
+    return CheckResult("独立虚拟环境", passed, detail)
+
+
 def check_utf8_and_write(workspace: Path) -> CheckResult:
     test_directory = workspace / f"env_check_{uuid.uuid4().hex}"
     try:
@@ -77,14 +102,15 @@ def check_utf8_and_write(workspace: Path) -> CheckResult:
 
 def check_sqlite() -> CheckResult:
     try:
+        sqlite3 = importlib.import_module("sqlite3")
         connection = sqlite3.connect(":memory:")
         connection.execute("CREATE TABLE smoke_test(value INTEGER, note TEXT NULL)")
         connection.execute("INSERT INTO smoke_test VALUES (?, ?)", (0, None))
         row = connection.execute("SELECT value, note FROM smoke_test").fetchone()
         connection.close()
-        return CheckResult("SQLite选做路径", row == (0, None), f"读取结果：{row}")
+        return CheckResult("SQLite选做路径", row == (0, None), f"读取结果：{row}", required=False)
     except Exception as exc:
-        return CheckResult("SQLite选做路径", False, str(exc))
+        return CheckResult("SQLite选做路径", False, f"{exc}；继续使用CSV必做路径", required=False)
 
 
 def check_paths(project_root: Path) -> CheckResult:
@@ -150,6 +176,7 @@ def main() -> int:
     )
     results.extend(
         [
+            check_virtual_environment(project_root),
             check_utf8_and_write(writable_root),
             check_sqlite(),
             check_paths(project_root),
@@ -161,12 +188,17 @@ def main() -> int:
     print(f"当前目录：{Path.cwd()}")
     print()
     for result in results:
-        marker = "PASS" if result.passed else "FAIL"
+        marker = "PASS" if result.passed else "FAIL" if result.required else "WARN"
         print(f"[{marker}] {result.name}：{result.detail}")
 
-    failed = [result for result in results if not result.passed]
+    required_results = [result for result in results if result.required]
+    failed = [result for result in required_results if not result.passed]
+    optional_results = [result for result in results if not result.required]
     print()
-    print(f"总结：{len(results) - len(failed)}/{len(results)}项通过")
+    print(f"必做检查：{len(required_results) - len(failed)}/{len(required_results)}项通过")
+    if optional_results:
+        available = sum(result.passed for result in optional_results)
+        print(f"选做检查：{available}/{len(optional_results)}项可用；不可用时按降级路径继续")
     if failed:
         print("请先修复失败项，再进行模块试跑。")
         return 1

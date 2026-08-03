@@ -1,23 +1,26 @@
-# M4 两种来源字段定义
+# M4 两种来源字段和来源语义说明
 
 本文件与 `teaching_message_spec.md`、`opensky_field_dictionary.csv`、`partner_field_dictionary.csv`、`unified_model.json` 一起构成 M4 人工核验的权威依据。
 
 ## OpenSky 当前态势来源
 
-- `target_id`：六位十六进制字符串，映射为 `track_id`。
-- `latest_time`：Unix 秒，映射为 `timestamp`。
-- `lat/lon`：已经是度；任一为空时 `quality.position_valid=false`。
-- `altitude`：米；`alt_type` 保留 barometric/geometric/unknown。
-- `speed`、`vertical_rate`：m/s；`heading`：度。
-- `time_source`：position_time 或 last_contact_fallback；时间回退不等于时间无效。
-
-## TeachingLink 当前态势来源
-
-- 协议整数必须结合 `validity_flags`、比例因子和偏置解释。
-- 有效位为 0 时统一模型字段必须为 `null`，不能把占位整数 0 当真实值。
-- `status_flags.bit1` 仅在高度有效时解释高度来源。
-- `status_flags.bit2` 表示时间来源回退，不直接令 `quality.time_valid=false`。
-- `message_valid` 只由完整帧接收判据产生，不能推断来源可信或内容真实。
+| 统一字段|OpenSky来源|教学消息来源|规则|
+| ---------------------- | ------------------ | --------------------------------------- | -------------------------------------------------------- |
+| track_id               | target_id          | target_id                               | 统一转为六位小写十六进制字符串，保留前导0                |
+| timestamp              | latest_time        | timestamp                               | 直接映射，必须为正整数                                   |
+| quality.time_source    | timestamp_source   | status_flags.bit2                       | position_time或last_contact_fallback                     |
+| identity.callsign      | callsign           | callsign＋validity_flags.bit6           | 无效时为null；有效时去除补0                              |
+| position.lat           | lat                | latitude_code＋validity_flags.bit0      | 无效时null；有效时code/(2²²−1)×180−90                    |
+| position.lon           | lon                | longitude_code＋validity_flags.bit1     | 无效时null；有效时code/(2²²−1)×360−180                   |
+| position.alt           | altitude           | altitude_code＋validity_flags.bit2      | 无效时null；有效时code−1000，单位米                      |
+| position.alt_type      | baro／geo来源      | status_flags.bit1                       | altitude有效时0=barometric、1=geometric；无效时unknown   |
+| motion.speed           | speed              | speed_code＋validity_flags.bit3         | 无效时null；有效时code×0.1 m/s                           |
+| motion.heading         | heading            | heading_code＋validity_flags.bit4       | 无效时null；有效时code×0.01°且小于360°                   |
+| motion.vertical_rate   | vertical_rate      | vertical_rate_code＋validity_flags.bit5 | 无效时null；有效时code×0.01−327.68 m/s                   |
+| status.on_ground       | on_ground          | status_flags.bit0                       | 转换为布尔值                                             |
+| quality.position_valid | lat／lon非空且合法 | 纬经有效位＋解码范围                    | 纬度和经度均有效且解码值处于合法范围                     |
+| quality.time_valid     | latest_time有效    | timestamp及帧接收结果                   | timestamp为正整数；时间回退不等于时间无效                |
+| quality.message_valid  | 源记录结构校验结果 | 完整帧接收判据                          | 头字段、长度、校验和、保留位、标志一致性及必需字段均通过 |
 
 ## 人工核验要求
 

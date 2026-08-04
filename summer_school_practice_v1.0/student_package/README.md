@@ -26,6 +26,10 @@
 - 输出：`decoded_multitime.csv`、`track_table.csv`、`current_situation.csv`；SQLite/航迹图选做。
 - 输入帧边界已对齐；要求处理不完整尾帧，不要求失步重同步。
 
+### 真实 ADS-B 数据扩展（选做）
+
+`data/real_adsb/` 提供从 ADSB.lol 公开 API 实际抓取的 3 个快照、规范化 CSV、3 个目标 × 3 个时刻的 TeachingLink 帧流和来源校验信息。该目录没有插值或人工补值，适合在完成固定教学样例后复跑 M2/M3。使用前先阅读其中的 `README.md`、`LICENSE_DATA.md` 和 `provenance.json`；固定边界值与异常验收仍以原有合成教学数据为准。
+
 ## M4 语义互操作
 
 - 输入：`data/partner_current_situation.csv`、字段定义、`unified_model.json`。

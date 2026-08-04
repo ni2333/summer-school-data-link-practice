@@ -1,0 +1,64 @@
+{
+  "dataset_name": "ADSB.lol Tokyo-area three-snapshot teaching dataset",
+  "full_api_response_note": "Only filtered source records are committed; hashes of full responses are retained for provenance.",
+  "full_api_responses_committed": false,
+  "generated_at_utc": "2026-08-04T03:03:06.591519Z",
+  "license": "Open Data Commons Open Database License (ODbL) 1.0",
+  "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "no_interpolation": true,
+  "no_synthetic_values": true,
+  "normalization": {
+    "altitude": "prefer alt_geom, otherwise alt_baro; feet x 0.3048 = metres",
+    "retained_filter": "valid six-hex ICAO address; nonempty ASCII callsign <=8 bytes; lat/lon present; dbFlags is 0/null",
+    "speed": "ground speed knots x 0.514444 = metres/second",
+    "three_by_three_filter": "same target in all snapshots; numeric position, altitude, speed, heading, vertical rate and seen_pos",
+    "timestamp": "floor(response now in seconds - aircraft seen_pos seconds)",
+    "vertical_rate": "prefer geom_rate, otherwise baro_rate; feet/minute x 0.00508 = metres/second"
+  },
+  "normalized_record_count": 222,
+  "provider": "ADSB.lol",
+  "provider_api_documentation": "https://www.adsb.lol/docs/open-data/api/",
+  "query": {
+    "latitude": 35.6762,
+    "longitude": 139.6503,
+    "radius_nm": 100
+  },
+  "selected_targets": [
+    "4406de",
+    "71bf43",
+    "71c073"
+  ],
+  "snapshot_count": 3,
+  "snapshot_interval_seconds": 10.0,
+  "source_url": "https://api.adsb.lol/v2/lat/35.6762/lon/139.6503/dist/100",
+  "sources": [
+    {
+      "api_reported_total": 83,
+      "captured_at_utc": "2026-08-04T03:02:35.008000Z",
+      "committed_filtered_file_sha256": "5b33c261b98f6721259f8f558479f5c290891c17043fba03adbecd56b6a5c01b",
+      "file": "source/adsb_lol_tokyo_filtered_snapshot_01.json",
+      "full_response_sha256": "f37063e45590d95b0065e2c0f5568c19236154b27e5a6084540f7ef51c6a58f6",
+      "retained_count": 74,
+      "snapshot_index": 1
+    },
+    {
+      "api_reported_total": 83,
+      "captured_at_utc": "2026-08-04T03:02:46.501000Z",
+      "committed_filtered_file_sha256": "4552b973aea5fde9d49de218747b15df8d16683f9f4be91d1f28db6dac00a234",
+      "file": "source/adsb_lol_tokyo_filtered_snapshot_02.json",
+      "full_response_sha256": "7e84d48788d9594bfbddcff0e8f4626abf21d7869ed3cc4fff30d556057048e5",
+      "retained_count": 74,
+      "snapshot_index": 2
+    },
+    {
+      "api_reported_total": 84,
+      "captured_at_utc": "2026-08-04T03:02:58Z",
+      "committed_filtered_file_sha256": "46430df934dc9509359052ba3d2dedb107ec375d26b6a21bf88b734527eca694",
+      "file": "source/adsb_lol_tokyo_filtered_snapshot_03.json",
+      "full_response_sha256": "61fadc476022165ebae35ca7a75ed5a0364b04e333382a1da657d1cf74816f5f",
+      "retained_count": 74,
+      "snapshot_index": 3
+    }
+  ],
+  "teaching_record_count": 9
+}

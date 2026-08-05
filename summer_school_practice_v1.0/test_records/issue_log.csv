@@ -14,4 +14,4 @@ DOC-003,文档整理,MEDIUM,仓库入口与学生入口重复环境安装信息�
 ENV-003,环境降级,HIGH,SQLite为选做但环境检查和端到端试跑将其作为必过条件,environment_check与run_full_trial代码复核,SQLite改为非阻断选做检查并增加独立CSV必做链试跑,FIXED,CSV主链13项成果和SQLite选做链14项成果分别通过
 ENV-004,环境隔离,HIGH,环境检查只打印解释器路径但未判定是否使用课程包独立虚拟环境,environment_check代码复核,新增.venv路径与include-system-site-packages=false强制检查,FIXED,独立虚拟环境检查PASS
 ENV-005,M4降级,MEDIUM,预生成候选存在但未纳入环境冒烟检查,run_smoke_test原5项检查,新增候选路径字段和非空内容检查,FIXED,M4预生成候选8行读取PASS
-DATA-002,M2-M3真实数据,MEDIUM,基础实践只有可重复的合成教学数据但缺少有许可和来源追踪的真实数据试跑样例,ADSB.lol公开API三次在线抓取,新增ODbL署名的222条规范化记录以及3目标乘3时刻TeachingLink数据并保存来源哈希,FIXED,真实数据5项离线测试和全量检查通过
+DATA-002,M2-M3数据源,HIGH,曾加入非课程指定来源的真实ADS-B数据,教师反馈要求统一使用OpenSky,移除该真实数据及派生文件脚本测试和文档入口且不代替其他助教添加OpenSky数据,REMOVED,全仓检索无已移除数据源引用且全量检查通过

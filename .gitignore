@@ -18,6 +18,7 @@ summer_school_practice_v1.0/test_records/.last_trial_output*/
 summer_school_practice_v1.0/test_records/latest_reference_run/
 summer_school_practice_v1.0/test_records/latest_trial_report*.json
 summer_school_practice_v1.0/environment/wheelhouse/
+summer_school_practice_v1.0/dist/
 
 # Release archives are published after version freeze
 *.zip

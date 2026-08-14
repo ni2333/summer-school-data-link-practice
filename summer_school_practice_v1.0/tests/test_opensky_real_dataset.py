@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "student_package" / "data" / "opensky_real"
+EXPECTED = ROOT / "ta_reference_package" / "expected_results"
 REFERENCE = ROOT / "ta_reference_package" / "reference_implementation"
 sys.path.insert(0, str(REFERENCE))
 
@@ -87,7 +88,7 @@ class OpenSkyRealDatasetTests(unittest.TestCase):
         self.assertTrue(all(row["message_valid"] for row in decoded))
 
     def test_08_roundtrip_report_accounts_for_every_source_vector(self):
-        with (DATA / "roundtrip_report.csv").open(encoding="utf-8", newline="") as handle:
+        with (EXPECTED / "opensky_real_roundtrip_report.csv").open(encoding="utf-8", newline="") as handle:
             rows = list(csv.DictReader(handle))
         self.assertEqual(len(rows), self.provenance["normalized_record_count"])
         counts = Counter(row["outcome"] for row in rows)

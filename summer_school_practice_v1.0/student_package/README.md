@@ -4,7 +4,13 @@
 
 ## 开始前
 
-先按 `../environment/README_environment.md` 在正式课程包根目录建立独立 `.venv`，并确认环境检查和文件冒烟测试通过。环境安装、验证命令和不可用时的降级路径统一以该文件为准。
+先按 `../environment/README_environment.md` 在正式课程包根目录建立独立 `.venv`，再运行：
+
+```powershell
+.\.venv\Scripts\python.exe environment\run_student_checks.py
+```
+
+确认全部学生检查通过后再开始实践。环境安装、验证命令和不可用时的降级路径统一以环境说明为准。
 
 ## M1 体系理解
 
@@ -28,7 +34,7 @@
 
 ### OpenSky 真实数据
 
-`data/opensky_real/` 是从 OpenSky 官方匿名 REST API 实际下载的 3 个快照，共 71 条状态向量，不是人工编造数据。根目录 `experiment/run_opensky_experiment.py` 可直接用这些数据完成 10 个目标的编码、传输、接收、入库和精度对比实验。
+`data/opensky_real/` 是从 OpenSky 官方匿名 REST API 实际下载的 3 个快照，共 71 条状态向量，不是人工编造数据。该目录用于学生使用本人完成的 M2-M3 代码进行真实数据兼容性验证，不包含助教逐记录往返参考结果。
 
 ## M4 语义互操作
 
@@ -48,5 +54,7 @@
 ## M6 综合演练
 
 将 M2-M5 代码接入 `src_skeleton/run_all.py`，从空 `output/` 目录执行。README 使用 `templates/m6_README_template.md`，并记录输入、输出和实验结果；运行命令见该模板。
+
+前序结果阻断后续模块时，只有在助教A正式发布后才可按 `templates/checkpoint_switch.md` 使用官方检查点；检查点不能替代本人前序成果。
 
 完整提交项见 `templates/submission_checklist.md`。

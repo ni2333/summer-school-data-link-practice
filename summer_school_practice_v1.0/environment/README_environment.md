@@ -13,7 +13,7 @@ SQLite 只作为 M3 选做路径。大模型不可用时，M4 必须使用学校
 
 ## 一键部署
 
-在 `summer_school_practice_v1.0/` 根目录执行。脚本会创建 `.venv`、安装固定范围内的依赖并运行全部检查。
+在 `summer_school_practice_v1.0/` 根目录执行。脚本会创建 `.venv`、安装固定范围内的依赖，并根据课程包内容自动选择检查入口：学生候选包运行学生检查，完整助教包运行全量检查。
 
 Windows PowerShell：
 
@@ -47,7 +47,25 @@ python3 -m venv .venv
 
 这里的系统 `python` 或 `python3` 只用于创建虚拟环境；创建后不再用它运行实践代码。
 
-## 全量验证
+## 学生包验证
+
+学生拿到候选包后运行：
+
+Windows PowerShell：
+
+```powershell
+.\.venv\Scripts\python.exe environment\run_student_checks.py
+```
+
+Linux/macOS：
+
+```bash
+./.venv/bin/python environment/run_student_checks.py
+```
+
+该入口检查Python与依赖、独立虚拟环境、UTF-8和路径读写、JSON/二进制/CSV/NDJSON样例、正式输入、M4预生成候选、代码骨架语法以及学生包边界。
+
+## 完整助教包验证
 
 Windows PowerShell：
 
@@ -61,14 +79,14 @@ Linux/macOS：
 ./.venv/bin/python environment/run_all_checks.py
 ```
 
-该命令依次执行环境检查、文件冒烟测试、文件清单检查、协议自动化测试、M2-M6 参考链、OpenSky 完整实验以及 SQLite 路径。所有实验检查应当通过。
+该命令依次执行环境检查、文件冒烟测试、文件清单检查、候选发布包边界与已有ZIP一致性检查、自动化测试、M2-M6 参考链、OpenSky 完整实验以及 SQLite 路径。`dist/` 不存在时跳过已有ZIP检查；存在时必须与当前源文件完全一致。该入口需要助教参考包和内部测试文件，不随学生候选包提供。
 
 ## 离线环境
 
 如果实验电脑不能联网，可在相同操作系统和 Python 版本的联网电脑执行：
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip download --only-binary=:all: -r environment\requirements.txt -d environment\wheelhouse
+.\.venv\Scripts\python.exe environment\build_wheelhouse.py
 ```
 
 将 `environment/wheelhouse/` 随部署介质复制到离线电脑后执行：
@@ -76,16 +94,16 @@ Linux/macOS：
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --no-index --find-links environment\wheelhouse -r environment\requirements.txt
-.\.venv\Scripts\python.exe environment\run_all_checks.py
+.\.venv\Scripts\python.exe environment\run_student_checks.py
 ```
 
-仓库已包含 OpenSky 离线快照，实验运行不依赖 OpenSky 实时 API、付费大模型、数据库服务器或管理员权限。
+仓库已包含 OpenSky 离线快照，课堂必做任务不依赖 OpenSky 实时 API、付费大模型、数据库服务器或管理员权限。`wheelhouse` 必须在与机房相同的操作系统、CPU架构和Python版本上生成并完成离线试跑；当前仓库只提供制作脚本，不表示离线环境已经冻结。
 
 ## 降级路径
 
 - SQLite 不可用：继续使用 CSV 完成 M3 必做任务。
 - 大模型不可用：使用 `pre_generated_mapping_candidate.csv` 完成 M4 人工核验。
-- 学生前序结果错误：可用 `ta_reference_package/expected_results/` 中的参考结果定位差异。
+- 学生前序结果错误并阻断后续模块：在助教A正式发布检查点后，按 `student_package/templates/checkpoint_switch.md` 继续；检查点不得替代前序成果提交。
 - 中文路径、含空格路径或无管理员权限场景失败：保留完整报错和实际路径，再修复相应脚本。
 
 ## 常见错误

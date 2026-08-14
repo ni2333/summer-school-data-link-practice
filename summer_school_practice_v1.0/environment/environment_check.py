@@ -113,22 +113,15 @@ def check_sqlite() -> CheckResult:
         return CheckResult("SQLite选做路径", False, f"{exc}；继续使用CSV必做路径", required=False)
 
 
-def check_paths(project_root: Path) -> CheckResult:
-    required = (
+def check_paths(project_root: Path, student_mode: bool) -> CheckResult:
+    required = [
         project_root / "student_package",
         project_root / "student_package" / "data",
         project_root / "student_package" / "schema",
         project_root / "student_package" / "templates",
         project_root / "student_package" / "src_skeleton",
-        project_root / "ta_reference_package",
-        project_root / "ta_reference_package" / "checkpoints",
-        project_root / "ta_reference_package" / "reference_implementation",
-        project_root / "ta_reference_package" / "expected_results",
-        project_root / "ta_reference_package" / "case_manifest_internal.csv",
         project_root / "environment",
-        project_root / "test_records",
-        project_root / "manifest.csv",
-        project_root / "release_notes.md",
+        project_root / "environment" / "run_student_checks.py",
         project_root / "student_package" / "data" / "raw_states.json",
         project_root / "student_package" / "data" / "partner_messages_sample.bin",
         project_root / "student_package" / "data" / "partner_messages_multitime.bin",
@@ -137,12 +130,38 @@ def check_paths(project_root: Path) -> CheckResult:
         project_root / "student_package" / "schema" / "unified_model.json",
         project_root / "student_package" / "guides" / "opensky_interface_summary.md",
         project_root / "student_package" / "guides" / "m1_guided_questions.md",
-        project_root / "ta_reference_package" / "checkpoints" / "official_decoded_multitime.csv",
-        project_root / "ta_reference_package" / "checkpoints" / "official_current_situation.csv",
-        project_root / "ta_reference_package" / "reference_implementation" / "run_all_reference.py",
-        project_root / "environment" / "run_full_trial.py",
-        project_root / "tests" / "test_reference_pipeline.py",
-    )
+        project_root / "student_package" / "templates" / "checkpoint_switch.md",
+        project_root / "student_package" / "templates" / "submission_checklist.md",
+    ]
+    if student_mode:
+        internal_directories = [
+            project_root / "ta_reference_package",
+            project_root / "tests",
+            project_root / "test_records",
+        ]
+        leaked = [str(path) for path in internal_directories if path.exists()]
+        if leaked:
+            return CheckResult("正式目录结构", False, "学生包包含内部目录：" + "；".join(leaked))
+    else:
+        required.extend(
+            [
+                project_root / "ta_reference_package",
+                project_root / "ta_reference_package" / "checkpoints",
+                project_root / "ta_reference_package" / "reference_implementation",
+                project_root / "ta_reference_package" / "expected_results",
+                project_root / "ta_reference_package" / "case_manifest_internal.csv",
+                project_root / "environment" / "run_all_checks.py",
+                project_root / "environment" / "run_full_trial.py",
+                project_root / "environment" / "build_release_packages.py",
+                project_root / "test_records",
+                project_root / "test_records" / "environment_trial_record_template.md",
+                project_root / "test_records" / "module_trial_record_template.md",
+                project_root / "test_records" / "ta_work_assignment.md",
+                project_root / "tests" / "test_reference_pipeline.py",
+                project_root / "manifest.csv",
+                project_root / "release_notes.md",
+            ]
+        )
     missing = [str(path) for path in required if not path.exists()]
     if missing:
         return CheckResult("正式目录结构", False, "缺少：" + "；".join(missing))
@@ -160,13 +179,22 @@ def parse_args() -> argparse.Namespace:
         default=Path(__file__).resolve().parents[1],
         help="工作区根目录，默认取脚本上一级目录。",
     )
+    parser.add_argument(
+        "--student-mode",
+        action="store_true",
+        help="只检查学生候选包所需目录，并确认未包含助教内部目录。",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     project_root = args.project_root.resolve()
-    writable_root = project_root / "test_records"
+    writable_root = (
+        project_root / "student_package" / "output"
+        if args.student_mode
+        else project_root / "test_records"
+    )
     results = [check_python()]
     results.extend(
         [
@@ -179,7 +207,7 @@ def main() -> int:
             check_virtual_environment(project_root),
             check_utf8_and_write(writable_root),
             check_sqlite(),
-            check_paths(project_root),
+            check_paths(project_root, args.student_mode),
         ]
     )
 

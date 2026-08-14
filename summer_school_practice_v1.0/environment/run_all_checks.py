@@ -21,6 +21,7 @@ def main() -> int:
         run("环境检查", [sys.executable, "environment/environment_check.py"]),
         run("文件冒烟测试", [sys.executable, "environment/run_smoke_test.py"]),
         run("文件清单检查", [sys.executable, "environment/verify_manifest.py"]),
+        run("候选发布包边界检查", [sys.executable, "environment/build_release_packages.py", "--check-only"]),
         run("自动化测试", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"]),
         run("M2-M6 CSV必做路径试跑", [sys.executable, "environment/run_full_trial.py"]),
         run("OpenSky完整实验试跑", [sys.executable, "experiment/run_opensky_experiment.py", "--targets", "10"]),

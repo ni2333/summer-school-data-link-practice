@@ -26,8 +26,16 @@ Write-Host "[3/4] Installing required packages"
 & $VenvPython -m pip install --disable-pip-version-check -r (Join-Path $PSScriptRoot "requirements.txt")
 Assert-LastExitCode "Dependency installation"
 
+if (Test-Path (Join-Path $ProjectRoot "ta_reference_package")) {
+    $CheckScript = Join-Path $PSScriptRoot "run_all_checks.py"
+    $CheckCommand = ".\.venv\Scripts\python.exe environment\run_all_checks.py"
+} else {
+    $CheckScript = Join-Path $PSScriptRoot "run_student_checks.py"
+    $CheckCommand = ".\.venv\Scripts\python.exe environment\run_student_checks.py"
+}
+
 Write-Host "[4/4] Running environment and practice-package checks"
-& $VenvPython (Join-Path $PSScriptRoot "run_all_checks.py")
+& $VenvPython $CheckScript
 Assert-LastExitCode "Project checks"
 
-Write-Host "Setup complete. Re-run with: .\.venv\Scripts\python.exe environment\run_all_checks.py"
+Write-Host "Setup complete. Re-run with: $CheckCommand"

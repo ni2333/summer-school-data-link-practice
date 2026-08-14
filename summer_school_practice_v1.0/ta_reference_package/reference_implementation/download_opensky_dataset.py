@@ -25,6 +25,7 @@ API_DOCUMENTATION = "https://openskynetwork.github.io/opensky-api/rest.html"
 DEFAULT_BBOX = {"lamin": 45.5, "lomin": 5.0, "lamax": 49.5, "lomax": 12.0}
 PACKAGE_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = PACKAGE_ROOT / "student_package" / "data" / "opensky_real"
+ROUNDTRIP_OUTPUT = PACKAGE_ROOT / "ta_reference_package" / "expected_results" / "opensky_real_roundtrip_report.csv"
 
 NORMALIZED_FIELDS = [
     "snapshot_index", "snapshot_time", "vector_index", "icao24", "callsign",
@@ -108,7 +109,13 @@ def write_csv(path: Path, fields: list[str], rows: list[dict[str, Any]]) -> None
         writer.writerows(rows)
 
 
-def build_dataset(output_dir: Path, snapshots: int, interval: float, bbox: dict[str, float]) -> dict[str, Any]:
+def build_dataset(
+    output_dir: Path,
+    roundtrip_output: Path,
+    snapshots: int,
+    interval: float,
+    bbox: dict[str, float],
+) -> dict[str, Any]:
     source_dir = output_dir / "source"
     source_dir.mkdir(parents=True, exist_ok=True)
     url = api_url(bbox)
@@ -214,7 +221,7 @@ def build_dataset(output_dir: Path, snapshots: int, interval: float, bbox: dict[
     if not frames:
         raise RuntimeError("真实快照中没有可完成 TeachingLink 往返的有位置记录")
     write_csv(output_dir / "normalized_state_vectors.csv", NORMALIZED_FIELDS, normalized)
-    write_csv(output_dir / "roundtrip_report.csv", ROUNDTRIP_FIELDS, roundtrip_rows)
+    write_csv(roundtrip_output, ROUNDTRIP_FIELDS, roundtrip_rows)
     (output_dir / "opensky_real_messages.bin").write_bytes(b"".join(frames))
     repeated_targets = sorted(target for target, count in target_observations.items() if count >= 2)
     provenance = {
@@ -246,6 +253,7 @@ def build_dataset(output_dir: Path, snapshots: int, interval: float, bbox: dict[
 def main() -> int:
     parser = argparse.ArgumentParser(description="Download traceable real OpenSky state-vector snapshots.")
     parser.add_argument("--output", type=Path, default=OUTPUT_DIR)
+    parser.add_argument("--roundtrip-output", type=Path, default=ROUNDTRIP_OUTPUT)
     parser.add_argument("--snapshots", type=int, default=3)
     parser.add_argument("--interval", type=float, default=11.0)
     parser.add_argument("--lamin", type=float, default=DEFAULT_BBOX["lamin"])
@@ -260,9 +268,10 @@ def main() -> int:
     bbox = {"lamin": args.lamin, "lomin": args.lomin, "lamax": args.lamax, "lomax": args.lomax}
     if not (-90 <= args.lamin < args.lamax <= 90 and -180 <= args.lomin < args.lomax <= 180):
         parser.error("边界框范围或顺序无效")
-    provenance = build_dataset(args.output, args.snapshots, args.interval, bbox)
+    provenance = build_dataset(args.output, args.roundtrip_output, args.snapshots, args.interval, bbox)
     print(json.dumps({
         "output": str(args.output),
+        "roundtrip_output": str(args.roundtrip_output),
         "snapshots": provenance["snapshot_count"],
         "records": provenance["normalized_record_count"],
         "encoded_frames": provenance["encoded_frame_count"],

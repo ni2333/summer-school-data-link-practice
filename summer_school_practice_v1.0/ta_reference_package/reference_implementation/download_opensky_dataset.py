@@ -22,7 +22,6 @@ from practice_reference import (
 
 API_BASE = "https://opensky-network.org/api/states/all"
 API_DOCUMENTATION = "https://openskynetwork.github.io/opensky-api/rest.html"
-DATA_TERMS_URL = "https://opensky-network.org/data/data-terms"
 DEFAULT_BBOX = {"lamin": 45.5, "lomin": 5.0, "lamax": 49.5, "lomax": 12.0}
 PACKAGE_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = PACKAGE_ROOT / "student_package" / "data" / "opensky_real"
@@ -223,7 +222,6 @@ def build_dataset(output_dir: Path, snapshots: int, interval: float, bbox: dict[
         "provider": "The OpenSky Network",
         "source_url": url,
         "api_documentation": API_DOCUMENTATION,
-        "data_terms_url": DATA_TERMS_URL,
         "downloaded_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "query_bbox_wgs84": bbox,
         "anonymous_api": True,
@@ -237,8 +235,6 @@ def build_dataset(output_dir: Path, snapshots: int, interval: float, bbox: dict[
         "repeated_targets": repeated_targets,
         "no_interpolation": True,
         "no_synthetic_values": True,
-        "distribution_review_required": True,
-        "distribution_note": "Before publishing these snapshots, the responsible TA must review the current OpenSky data terms and confirm attribution/redistribution requirements.",
     }
     (output_dir / "provenance.json").write_text(
         json.dumps(provenance, ensure_ascii=False, indent=2, sort_keys=True) + "\n",

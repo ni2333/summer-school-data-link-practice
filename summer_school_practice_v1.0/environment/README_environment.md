@@ -1,6 +1,6 @@
 # 统一实验环境说明
 
-本文是正式课程包唯一的环境安装、验证和降级说明。所有实践命令均使用课程包根目录下的 `.venv`，不依赖本机已经安装的第三方 Python 包。
+本文说明实验环境的安装、验证和降级方法。所有实践命令均使用项目根目录下的 `.venv`，不依赖本机已经安装的第三方 Python 包。
 
 ## 环境要求
 
@@ -61,11 +61,11 @@ Linux/macOS：
 ./.venv/bin/python environment/run_all_checks.py
 ```
 
-该命令依次执行环境检查、文件冒烟测试、发布清单和学生/助教包边界检查、协议自动化测试、M2-M6 CSV 必做路径试跑以及 SQLite 选做路径试跑。必做检查必须全部通过；SQLite 不可用时输出 `WARN` 并继续，不阻断 CSV 必做路径。
+该命令依次执行环境检查、文件冒烟测试、文件清单检查、协议自动化测试、M2-M6 参考链、OpenSky 完整实验以及 SQLite 路径。所有实验检查应当通过。
 
 ## 离线环境
 
-正式发布前应在与机房相同的操作系统和 Python 版本上准备离线依赖。联网准备机执行：
+如果实验电脑不能联网，可在相同操作系统和 Python 版本的联网电脑执行：
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip download --only-binary=:all: -r environment\requirements.txt -d environment\wheelhouse
@@ -79,14 +79,14 @@ python -m venv .venv
 .\.venv\Scripts\python.exe environment\run_all_checks.py
 ```
 
-如果不制作离线依赖目录，必须形成机房已预装所需版本的确认记录。学生必做任务不得依赖 OpenSky 实时 API、付费大模型、数据库服务器或管理员权限。
+仓库已包含 OpenSky 离线快照，实验运行不依赖 OpenSky 实时 API、付费大模型、数据库服务器或管理员权限。
 
 ## 降级路径
 
 - SQLite 不可用：继续使用 CSV 完成 M3 必做任务。
 - 大模型不可用：使用 `pre_generated_mapping_candidate.csv` 完成 M4 人工核验。
-- 学生前序结果错误：在模块结束后使用官方检查点继续后续任务，但检查点不得替代该模块本人提交。
-- 中文路径、含空格路径或无管理员权限场景必须在冻结前完成验证；若验证失败，应记录原因并修复环境包。
+- 学生前序结果错误：可用 `ta_reference_package/expected_results/` 中的参考结果定位差异。
+- 中文路径、含空格路径或无管理员权限场景失败：保留完整报错和实际路径，再修复相应脚本。
 
 ## 常见错误
 
@@ -95,4 +95,4 @@ python -m venv .venv
 - `pip` 无法联网：使用同平台、同 Python 版本准备的 `environment\wheelhouse` 离线安装。
 - SQLite 显示 `WARN`：不修复也可完成必做任务，继续生成 `decoded_multitime.csv`、`track_table.csv` 和 `current_situation.csv`。
 - 大模型不可用：直接读取 `student_package\reference\pre_generated_mapping_candidate.csv`，逐项人工核验后形成正式映射。
-- 中文或空格路径读写失败：将完整错误和实际路径记入环境试跑记录，由助教 A 判断是否阻断发布。
+- 中文或空格路径读写失败：确认终端与文件均使用 UTF-8，并从项目根目录重新运行。

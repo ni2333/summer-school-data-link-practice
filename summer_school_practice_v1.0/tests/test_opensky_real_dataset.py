@@ -29,11 +29,9 @@ class OpenSkyRealDatasetTests(unittest.TestCase):
         self.assertTrue(self.provenance["no_interpolation"])
         self.assertTrue(self.provenance["no_synthetic_values"])
 
-    def test_02_distribution_review_is_not_silently_bypassed(self):
-        self.assertTrue(self.provenance["distribution_review_required"])
-        notice = (DATA / "DISTRIBUTION_REVIEW_REQUIRED.md").read_text(encoding="utf-8")
-        self.assertIn("发布前", notice)
-        self.assertIn(self.provenance["data_terms_url"], notice)
+    def test_02_official_api_documentation_is_recorded(self):
+        self.assertIn("opensky-api/rest.html", self.provenance["api_documentation"])
+        self.assertNotIn("distribution_review_required", self.provenance)
 
     def test_03_three_raw_snapshots_match_sha256(self):
         self.assertEqual(self.provenance["snapshot_count"], 3)

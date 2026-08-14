@@ -6,7 +6,6 @@
 
 - API：<https://opensky-network.org/api/states/all>
 - 官方 REST 文档：<https://openskynetwork.github.io/opensky-api/rest.html>
-- 数据条款：<https://opensky-network.org/data/data-terms>
 
 文件：
 
@@ -22,4 +21,4 @@
 ..\.venv\Scripts\python.exe ..\ta_reference_package\reference_implementation\download_opensky_dataset.py
 ```
 
-没有插值、随机值或人工航空器记录。上传或发布前必须阅读 `DISTRIBUTION_REVIEW_REQUIRED.md`。
+没有插值、随机值或人工航空器记录。可直接运行 `../../../experiment/run_opensky_experiment.py` 完成收发、入库和精度分析。

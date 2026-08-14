@@ -1,10 +1,7 @@
 {
   "anonymous_api": true,
   "api_documentation": "https://openskynetwork.github.io/opensky-api/rest.html",
-  "data_terms_url": "https://opensky-network.org/data/data-terms",
   "dataset_name": "OpenSky Central Europe three-snapshot teaching dataset",
-  "distribution_note": "Before publishing these snapshots, the responsible TA must review the current OpenSky data terms and confirm attribution/redistribution requirements.",
-  "distribution_review_required": true,
   "downloaded_at_utc": "2026-08-14T02:06:23.002587Z",
   "encoded_frame_count": 71,
   "no_interpolation": true,

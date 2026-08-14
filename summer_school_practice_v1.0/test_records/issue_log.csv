@@ -1,19 +1,7 @@
 issue_id,stage,severity,problem,evidence,fix,status,verification
-PKG-001,初稿审查,BLOCKER,正式目录缺少学生data/schema与助教checkpoints/reference_implementation/expected_results,environment_check初始4/6,补齐学生输入与Schema、助教参考实现/检查点/预期结果,FIXED,environment_check 6/6
-ENV-001,环境部署,BLOCKER,独立环境未安装matplotlib,environment_check依赖检查失败,建立.venv并按requirements安装pandas 2.3.3与matplotlib 3.11.1,FIXED,setup.ps1及run_all_checks 5/5
-ENV-002,环境部署,HIGH,Windows PowerShell 5无法可靠解析无BOM中文setup.ps1,首次setup.ps1在右花括号处ParserError,将PowerShell运行提示和异常文本改为ASCII,FIXED,setup.ps1完成且退出码0
-DOC-001,学生说明,MEDIUM,M6 README模板命令指向不存在的src_skeleton/m6/run_all.py,模板原始命令,改为src_skeleton/run_all.py,FIXED,路径存在检查
-DOC-002,学生说明,LOW,提交清单写成果展示不超过5页但最终手册要求6页,最终修订稿10.5与原清单,统一改为不超过6页,FIXED,文本复核
-DATA-001,M2-M5,BLOCKER,无raw JSON/二进制/异常样例/字段字典/统一模型,仓库初稿仅含smoke_data,生成冻结小数据集与配套Schema,FIXED,数据生成脚本与全链读取
-REF-001,M2-M6,BLOCKER,无参考实现和官方检查点,release_notes明确尚未集成,新增完整参考链、M2/M3/M4/M5检查点和预期结果,FIXED,run_full_trial全部PASS
-TEST-001,自动化测试,MEDIUM,真实0值测试错误要求22位定点往返精确等于0,首轮9项测试1项失败,按手册改为一个量化单位内并继续检查有效位为1,FIXED,最终10/10自动化测试通过
-TEST-002,M2边界,HIGH,小于360但量化后等于360.00的航向会生成接收端越界帧,代码复核heading=359.999,编码端拒绝量化码大于等于36000并新增边界测试,FIXED,航向量化上边界测试通过
-TRIAL-001,正式试跑,BLOCKER,初稿只有文件读取冒烟测试没有M1-M6试跑,run_smoke_test仅4类文件读取,新增run_all_reference/run_full_trial/run_all_checks与冻结指标,FIXED,端到端14项成果/9帧/3目标/5告警/SQLite 9行
-OPS-001,管理台账,MEDIUM,关键里程碑和看板公式在原OOXML中包含前导等号导致部分解析器显示NAME错误,台账sheet2/sheet5公式XML以等号开头,不改源台账；建议项目负责人另行修复公式缓存与OOXML写法,EXTERNAL,已用原始XML复核并记录
-DOC-003,文档整理,MEDIUM,仓库入口与学生入口重复环境安装信息且助教命令使用系统Python,五类README交叉复核,按受众拆分README职责并以环境说明作为唯一安装来源且正式命令显式使用.venv,FIXED,文档链接复核和run_all_checks全量验证
-ENV-003,环境降级,HIGH,SQLite为选做但环境检查和端到端试跑将其作为必过条件,environment_check与run_full_trial代码复核,SQLite改为非阻断选做检查并增加独立CSV必做链试跑,FIXED,CSV主链13项成果和SQLite选做链14项成果分别通过
-ENV-004,环境隔离,HIGH,环境检查只打印解释器路径但未判定是否使用课程包独立虚拟环境,environment_check代码复核,新增.venv路径与include-system-site-packages=false强制检查,FIXED,独立虚拟环境检查PASS
-ENV-005,M4降级,MEDIUM,预生成候选存在但未纳入环境冒烟检查,run_smoke_test原5项检查,新增候选路径字段和非空内容检查,FIXED,M4预生成候选8行读取PASS
-DATA-002,M2-M3数据源,HIGH,曾加入非课程指定来源的真实ADS-B数据,教师反馈要求统一使用OpenSky,移除该真实数据及派生文件脚本测试和文档入口且不代替其他助教添加OpenSky数据,REMOVED,全仓检索无已移除数据源引用且全量检查通过
-PATH-001,M4-M5目录重构,BLOCKER,PR8移动M4和M5输入文件但环境检查清单参考实现生成器和测试仍使用旧路径,更新后run_all_checks必做0/5且自动化测试2项报错,保留子目录结构并统一修正所有消费者和生成路径,FIXED,全量检查和独立路径检索通过
-DATA-003,M2-M3真实数据,HIGH,main仅有生成器构造的OpenSky格式固定教学样例而无真实来源快照,核对raw_states生成脚本并调用OpenSky官方匿名REST接口,下载3快照71条状态向量并添加哈希溯源协议往返和10项离线测试但发布前需人工复核数据条款,REVIEW_REQUIRED,71条解析和往返通过且24个目标跨快照重复
+ENV-001,环境部署,BLOCKER,独立环境缺少依赖,环境检查失败,建立.venv并按requirements安装依赖,FIXED,run_all_checks环境检查通过
+PATH-001,M4-M5路径,BLOCKER,目录调整后部分代码仍读取旧路径,全量检查失败,统一修正输入路径,FIXED,全量检查通过
+DATA-001,真实数据,HIGH,原实验只有合成边界样例,仓库缺少真实来源快照,下载3个OpenSky官方接口快照并保存来源和哈希,FIXED,71条记录可解析且24个目标重复出现
+PROTO-001,协议边界,HIGH,航向小于360但量化后可能等于360.00,heading=359.999边界测试,编码端拒绝非法量化码,FIXED,边界自动化测试通过
+EXPERIMENT-001,完整实验,BLOCKER,缺少真实数据的连续收发和入库入口,只能分别运行数据和参考脚本,新增一键OpenSky实验及CSV/SQLite/误差报告,FIXED,10目标30帧全部有效
+PRECISION-001,精度分析,MEDIUM,未直观展示定点二进制量化误差,专家录音要求比较原始与解码位置,新增逐帧精度误差表和汇总指标,FIXED,水平误差小于5米且各字段不超过半个量化步长

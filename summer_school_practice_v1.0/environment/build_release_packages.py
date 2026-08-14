@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import zipfile
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -14,6 +15,7 @@ STUDENT_ARCHIVE = "student_package_v1.0.zip"
 TA_ARCHIVE = "ta_reference_package_v1.0.zip"
 
 FORBIDDEN_STUDENT_PARTS = {
+    "experiment",
     "ta_reference_package",
     "tests",
     "test_records",
@@ -48,29 +50,32 @@ class ManifestRow:
     student_public: bool
 
 
-def load_manifest() -> list[ManifestRow]:
+def read_manifest_rows() -> list[ManifestRow]:
     with MANIFEST.open("r", encoding="utf-8-sig", newline="") as handle:
         source_rows = list(csv.DictReader(handle))
-    rows = [
+    return [
         ManifestRow(
             path=row["path"].replace("\\", "/"),
             student_public=row["student_public"].strip().lower() == "true",
         )
         for row in source_rows
     ]
-    paths = [row.path for row in rows]
-    if len(paths) != len(set(paths)):
-        raise ValueError("manifest.csv存在重复路径")
-    missing = [row.path for row in rows if not (ROOT / row.path).is_file()]
-    if missing:
-        raise FileNotFoundError("manifest.csv存在缺失文件：" + "；".join(missing))
-    return rows
 
 
-def validate_student_paths(paths: set[str]) -> None:
-    missing_required = sorted(REQUIRED_STUDENT_PATHS - paths)
-    if missing_required:
-        raise ValueError("学生包缺少必需文件：" + "；".join(missing_required))
+def find_duplicate_manifest_paths(rows: list[ManifestRow]) -> list[str]:
+    counts = Counter(row.path for row in rows)
+    return sorted(path for path, count in counts.items() if count > 1)
+
+
+def find_missing_manifest_paths(rows: list[ManifestRow]) -> list[str]:
+    return [row.path for row in rows if not (ROOT / row.path).is_file()]
+
+
+def find_missing_required_student_paths(paths: set[str]) -> list[str]:
+    return sorted(REQUIRED_STUDENT_PATHS - paths)
+
+
+def find_student_policy_violations(paths: set[str]) -> list[str]:
     violations: list[str] = []
     for value in sorted(paths):
         parts = set(Path(value).parts)
@@ -80,8 +85,28 @@ def validate_student_paths(paths: set[str]) -> None:
             or value in FORBIDDEN_STUDENT_PATHS
         ):
             violations.append(value)
+    return violations
+
+
+def validate_student_paths(paths: set[str]) -> None:
+    missing_required = find_missing_required_student_paths(paths)
+    if missing_required:
+        raise ValueError("学生包缺少必需文件：" + "；".join(missing_required))
+    violations = find_student_policy_violations(paths)
     if violations:
         raise ValueError("学生包包含内部参考或答案文件：" + "；".join(violations))
+
+
+def load_manifest() -> list[ManifestRow]:
+    rows = read_manifest_rows()
+    duplicates = find_duplicate_manifest_paths(rows)
+    if duplicates:
+        raise ValueError("manifest.csv存在重复路径：" + "；".join(duplicates))
+    missing = find_missing_manifest_paths(rows)
+    if missing:
+        raise FileNotFoundError("manifest.csv存在缺失文件：" + "；".join(missing))
+    validate_student_paths({row.path for row in rows if row.student_public})
+    return rows
 
 
 def archive_name(relative: str) -> str:
@@ -106,14 +131,25 @@ def write_archive(target: Path, paths: list[str]) -> None:
 def verify_archive(target: Path, paths: set[str]) -> None:
     expected = {archive_name(path) for path in paths}
     with zipfile.ZipFile(target) as archive:
-        actual = set(archive.namelist())
+        names = archive.namelist()
+        duplicates = sorted(name for name, count in Counter(names).items() if count > 1)
+        actual = set(names)
         corrupt = archive.testzip()
-    if corrupt:
-        raise ValueError(f"{target.name}损坏条目：{corrupt}")
-    if actual != expected:
-        missing = sorted(expected - actual)
-        extra = sorted(actual - expected)
-        raise ValueError(f"{target.name}内容不一致：missing={missing}，extra={extra}")
+        if duplicates:
+            raise ValueError(f"{target.name}存在重复条目：{duplicates}")
+        if corrupt:
+            raise ValueError(f"{target.name}损坏条目：{corrupt}")
+        if actual != expected:
+            missing = sorted(expected - actual)
+            extra = sorted(actual - expected)
+            raise ValueError(f"{target.name}内容不一致：missing={missing}，extra={extra}")
+        mismatched = [
+            relative
+            for relative in sorted(paths)
+            if archive.read(archive_name(relative)) != (ROOT / relative).read_bytes()
+        ]
+    if mismatched:
+        raise ValueError(f"{target.name}内容与当前源文件不一致：{mismatched}")
 
 
 def package_plan(rows: list[ManifestRow]) -> tuple[list[str], list[str]]:
@@ -135,10 +171,31 @@ def clean_old_archives(output_dir: Path) -> None:
                 target.unlink()
 
 
+def verify_existing_archives(output_dir: Path, student_paths: list[str], ta_paths: list[str]) -> None:
+    plans = [
+        (output_dir / STUDENT_ARCHIVE, set(student_paths)),
+        (output_dir / TA_ARCHIVE, set(ta_paths)),
+    ]
+    existing = [target for target, _ in plans if target.exists()]
+    if not existing:
+        print(f"[SKIP] 未发现已有候选ZIP：{output_dir}")
+        return
+    missing = [target.name for target, _ in plans if not target.is_file()]
+    if missing:
+        raise FileNotFoundError("候选ZIP不完整，缺少：" + "；".join(missing))
+    for target, paths in plans:
+        verify_archive(target, paths)
+        print(f"[PASS] 已有候选ZIP与当前源文件一致：{target}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成并核对学生正式包和助教参考包候选文件。")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "dist")
-    parser.add_argument("--check-only", action="store_true", help="只检查清单和学生/助教边界，不写ZIP")
+    parser.add_argument(
+        "--check-only",
+        action="store_true",
+        help="检查清单、学生/助教边界及已有候选ZIP，不写ZIP",
+    )
     parser.add_argument("--clean", action="store_true", help="生成前删除旧候选压缩包")
     args = parser.parse_args()
 
@@ -146,11 +203,16 @@ def main() -> int:
     student_paths, ta_paths = package_plan(rows)
     print(f"[PASS] 学生包边界：{len(student_paths)}个公开文件")
     print(f"[PASS] 助教包清单：{len(ta_paths)}个正式文件")
-    if args.check_only:
-        return 0
-
     output_dir = args.output_dir.resolve()
     validate_output_dir(output_dir)
+    if args.check_only:
+        try:
+            verify_existing_archives(output_dir, student_paths, ta_paths)
+        except (OSError, ValueError) as exc:
+            print(f"[FAIL] 候选ZIP检查：{exc}")
+            return 1
+        return 0
+
     if args.clean:
         clean_old_archives(output_dir)
     student_target = output_dir / STUDENT_ARCHIVE

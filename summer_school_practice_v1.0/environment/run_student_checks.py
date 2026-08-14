@@ -31,29 +31,11 @@ def check_python_skeletons() -> bool:
     return True
 
 
-def check_student_boundary() -> bool:
-    forbidden = [ROOT / "ta_reference_package", ROOT / "tests", ROOT / "test_records"]
-    leaked = [path.name for path in forbidden if path.exists()]
-    if leaked:
-        print("[FAIL] 学生包边界：发现内部目录 " + "、".join(leaked))
-        return False
-    forbidden_files = [
-        ROOT / "student_package" / "data" / "opensky_real" / "roundtrip_report.csv",
-    ]
-    leaked_files = [path.relative_to(ROOT).as_posix() for path in forbidden_files if path.exists()]
-    if leaked_files:
-        print("[FAIL] 学生包边界：发现参考结果 " + "、".join(leaked_files))
-        return False
-    print("[PASS] 学生包边界：未包含助教参考、内部测试或试跑记录")
-    return True
-
-
 def main() -> int:
     checks = [
         run("学生环境检查", [sys.executable, "environment/environment_check.py", "--student-mode"]),
         run("学生文件冒烟测试", [sys.executable, "environment/run_smoke_test.py"]),
         check_python_skeletons(),
-        check_student_boundary(),
     ]
     print(f"\n学生包总检查：{sum(checks)}/{len(checks)}项通过")
     return 0 if all(checks) else 1

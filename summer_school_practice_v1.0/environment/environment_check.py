@@ -134,14 +134,16 @@ def check_paths(project_root: Path, student_mode: bool) -> CheckResult:
         project_root / "student_package" / "templates" / "submission_checklist.md",
     ]
     if student_mode:
-        internal_directories = [
+        internal_paths = [
+            project_root / "experiment",
             project_root / "ta_reference_package",
             project_root / "tests",
             project_root / "test_records",
+            project_root / "student_package" / "data" / "opensky_real" / "roundtrip_report.csv",
         ]
-        leaked = [str(path) for path in internal_directories if path.exists()]
+        leaked = [str(path) for path in internal_paths if path.exists()]
         if leaked:
-            return CheckResult("正式目录结构", False, "学生包包含内部目录：" + "；".join(leaked))
+            return CheckResult("正式目录结构", False, "学生包包含内部内容：" + "；".join(leaked))
     else:
         required.extend(
             [
@@ -156,7 +158,6 @@ def check_paths(project_root: Path, student_mode: bool) -> CheckResult:
                 project_root / "test_records",
                 project_root / "test_records" / "environment_trial_record_template.md",
                 project_root / "test_records" / "module_trial_record_template.md",
-                project_root / "test_records" / "ta_work_assignment.md",
                 project_root / "tests" / "test_reference_pipeline.py",
                 project_root / "manifest.csv",
                 project_root / "release_notes.md",

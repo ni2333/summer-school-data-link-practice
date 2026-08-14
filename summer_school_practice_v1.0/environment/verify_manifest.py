@@ -1,11 +1,15 @@
 from __future__ import annotations
 
-import csv
 from pathlib import Path
 
-
-ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "manifest.csv"
+from build_release_packages import (
+    ROOT,
+    find_duplicate_manifest_paths,
+    find_missing_manifest_paths,
+    find_missing_required_student_paths,
+    find_student_policy_violations,
+    read_manifest_rows,
+)
 EXCLUDED_PARTS = {".venv", "__pycache__", "dist", "wheelhouse"}
 EXCLUDED_PREFIXES = {
     "experiment/output/",
@@ -17,24 +21,13 @@ EXCLUDED_PREFIXES = {
 
 
 def main() -> int:
-    with MANIFEST.open("r", encoding="utf-8-sig", newline="") as handle:
-        rows = list(csv.DictReader(handle))
-    normalized_paths = [row["path"].replace("\\", "/") for row in rows]
-    listed = set(normalized_paths)
-    missing = [row["path"] for row in rows if not (ROOT / row["path"]).is_file()]
-    duplicate_paths = sorted(path for path in listed if normalized_paths.count(path) > 1)
-    invalid_public = []
-    for row in rows:
-        relative = row["path"].replace("\\", "/")
-        if row["student_public"].lower() != "true":
-            continue
-        parts = set(Path(relative).parts)
-        if (
-            parts & {"ta_reference_package", "tests", "test_records", "reference_implementation", "expected_results"}
-            or Path(relative).name in {"case_manifest_internal.csv", "expected_alert_counts.json"}
-            or relative == "student_package/data/opensky_real/roundtrip_report.csv"
-        ):
-            invalid_public.append(relative)
+    rows = read_manifest_rows()
+    listed = {row.path for row in rows}
+    missing = find_missing_manifest_paths(rows)
+    duplicate_paths = find_duplicate_manifest_paths(rows)
+    student_paths = {row.path for row in rows if row.student_public}
+    missing_required = find_missing_required_student_paths(student_paths)
+    invalid_public = find_student_policy_violations(student_paths)
     unlisted = []
     for path in ROOT.rglob("*"):
         if not path.is_file() or set(path.parts) & EXCLUDED_PARTS:
@@ -48,6 +41,7 @@ def main() -> int:
     checks = [
         ("清单路径存在", not missing, f"missing={missing}"),
         ("清单路径唯一", not duplicate_paths, f"duplicates={duplicate_paths}"),
+        ("学生包必需文件", not missing_required, f"missing_required={missing_required}"),
         ("学生公开边界", not invalid_public, f"invalid_public={invalid_public}"),
         ("正式文件均入清单", not unlisted, f"unlisted={unlisted}"),
     ]

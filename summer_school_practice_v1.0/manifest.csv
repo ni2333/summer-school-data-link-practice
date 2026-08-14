@@ -95,5 +95,4 @@ test_records/issue_log.csv,1.0.0-rc6,TA,问题闭环台账,false,ready
 test_records/end_to_end_trial_2026-07-29.md,1.0.0-rc1,TA,完整试跑记录,false,ready
 test_records/environment_trial_record_template.md,1.0.0-rc7,A,独立环境试跑记录模板,false,ready
 test_records/module_trial_record_template.md,1.0.0-rc7,A,模块交叉试跑记录模板,false,ready
-test_records/ta_work_assignment.md,1.0.0-rc7,A,三位助教分工与交叉试跑安排,false,ready
 test_records/a_release_candidate_trial_2026-08-14.md,1.0.0-rc7,A,助教A发布候选验收记录,false,ready

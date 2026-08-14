@@ -119,7 +119,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(tail_errors[0]["problem_type"], "LENGTH_ERROR")
 
     def test_quality_expected_counts(self):
-        rows = typed_anomaly_rows(ROOT / "student_package" / "data" / "anomaly_cases.csv")
+        rows = typed_anomaly_rows(ROOT / "student_package" / "data" / "m5" / "anomaly_cases.csv")
         alerts, quality = check_quality(rows)
         self.assertEqual(len(alerts), 5)
         self.assertEqual(sum(row["severity"] == "HIGH" for row in alerts), 1)

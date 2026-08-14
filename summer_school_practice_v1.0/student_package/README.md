@@ -26,9 +26,13 @@
 - 输出：`decoded_multitime.csv`、`track_table.csv`、`current_situation.csv`；SQLite/航迹图选做。
 - 输入帧边界已对齐；要求处理不完整尾帧，不要求失步重同步。
 
+### OpenSky 真实数据候选（发布前审核）
+
+`data/opensky_real/` 是从 OpenSky 官方匿名 REST API 实际下载的本地试验数据，不替换 `data/raw_states.json` 的固定合成边界样例。当前数据尚未完成人工条款复核，不属于正式学生发布内容；使用和上传前必须阅读该目录的 `DISTRIBUTION_REVIEW_REQUIRED.md`。
+
 ## M4 语义互操作
 
-- 输入：`data/partner_current_situation.csv`、字段定义、`unified_model.json`。
+- 输入：`data/m4/partner_current_situation.csv`、字段定义、`unified_model.json`。
 - 候选：自行使用大模型，或使用 `reference/pre_generated_mapping_candidate.csv`。
 - 骨架：`src_skeleton/m4_mapping.py`。
 - 输出：候选映射、人工核验映射、`unified_situation.ndjson`、一页核验说明。
@@ -36,7 +40,7 @@
 
 ## M5 一致性保障
 
-- 输入：`data/anomaly_cases.csv`、`data/anomaly_rules.csv`。
+- 输入：`data/m5/anomaly_cases.csv`、`data/m5/anomaly_rules.csv`。
 - 骨架：`src_skeleton/m5_quality.py`。
 - 输出：`alert_log.csv`、`quality_situation.csv`、异常结果说明。
 - 必做规则：位置缺失、延迟、联合键重复、航向越界。

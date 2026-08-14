@@ -12,8 +12,8 @@ M3-002,M3,partner_messages_incomplete_tail.bin,10,不完整尾帧,false,LENGTH_E
 M4-001,M4,pre_generated_mapping_candidate.csv,3-4,经纬度候选交换,false,人工核验,正式映射修正层次,C/B
 M4-002,M4,pre_generated_mapping_candidate.csv,5,高度遗漏负1000偏置,false,人工核验,正式规则code-1000,C/B
 M4-003,M4,pre_generated_mapping_candidate.csv,7,时间回退误判为时间无效,false,人工核验,time_valid仍由正timestamp决定,C/B
-M5-001,M5,anomaly_cases.csv,2,位置缺失,false,R1 POSITION_MISSING,HIGH告警,C/B
-M5-002,M5,anomaly_cases.csv,3,时间延迟,false,R2 DATA_DELAYED,MEDIUM告警,C/B
-M5-003,M5,anomaly_cases.csv,4-5,联合键重复,false,R3 DUPLICATE_RECORD,两条MEDIUM告警,C/B
-M5-004,M5,anomaly_cases.csv,6,heading等于360,false,R4 HEADING_OUT_OF_RANGE,MEDIUM告警,C/B
+M5-001,M5,m5/anomaly_cases.csv,2,位置缺失,false,R1 POSITION_MISSING,HIGH告警,C/B
+M5-002,M5,m5/anomaly_cases.csv,3,时间延迟,false,R2 DATA_DELAYED,MEDIUM告警,C/B
+M5-003,M5,m5/anomaly_cases.csv,4-5,联合键重复,false,R3 DUPLICATE_RECORD,两条MEDIUM告警,C/B
+M5-004,M5,m5/anomaly_cases.csv,6,heading等于360,false,R4 HEADING_OUT_OF_RANGE,MEDIUM告警,C/B
 M6-001,M6,student_package,all,完整参考链,true,,14项关键成果且冻结指标全部匹配,A/B+C

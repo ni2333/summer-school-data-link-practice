@@ -15,3 +15,5 @@ ENV-003,环境降级,HIGH,SQLite为选做但环境检查和端到端试跑将其
 ENV-004,环境隔离,HIGH,环境检查只打印解释器路径但未判定是否使用课程包独立虚拟环境,environment_check代码复核,新增.venv路径与include-system-site-packages=false强制检查,FIXED,独立虚拟环境检查PASS
 ENV-005,M4降级,MEDIUM,预生成候选存在但未纳入环境冒烟检查,run_smoke_test原5项检查,新增候选路径字段和非空内容检查,FIXED,M4预生成候选8行读取PASS
 DATA-002,M2-M3数据源,HIGH,曾加入非课程指定来源的真实ADS-B数据,教师反馈要求统一使用OpenSky,移除该真实数据及派生文件脚本测试和文档入口且不代替其他助教添加OpenSky数据,REMOVED,全仓检索无已移除数据源引用且全量检查通过
+PATH-001,M4-M5目录重构,BLOCKER,PR8移动M4和M5输入文件但环境检查清单参考实现生成器和测试仍使用旧路径,更新后run_all_checks必做0/5且自动化测试2项报错,保留子目录结构并统一修正所有消费者和生成路径,FIXED,全量检查和独立路径检索通过
+DATA-003,M2-M3真实数据,HIGH,main仅有生成器构造的OpenSky格式固定教学样例而无真实来源快照,核对raw_states生成脚本并调用OpenSky官方匿名REST接口,下载3快照71条状态向量并添加哈希溯源协议往返和10项离线测试但发布前需人工复核数据条款,REVIEW_REQUIRED,71条解析和往返通过且24个目标跨快照重复

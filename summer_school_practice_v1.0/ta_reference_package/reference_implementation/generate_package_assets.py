@@ -134,8 +134,9 @@ def write_student_inputs() -> tuple[list[dict[str, object]], list[dict[str, obje
         {"target_id": "780aaa", "timestamp": 1710000100, "lat": 35.1, "lon": 110.1, "heading": 181.0, "message_valid": True},
         {"target_id": "780bbb", "timestamp": 1710000110, "lat": 22.54, "lon": 114.05, "heading": 360.0, "message_valid": True},
     ]
-    write_csv(data_dir / "anomaly_cases.csv", anomaly_rows)
-    write_csv(data_dir / "anomaly_rules.csv", [
+    (data_dir / "m5").mkdir(parents=True, exist_ok=True)
+    write_csv(data_dir / "m5" / "anomaly_cases.csv", anomaly_rows)
+    write_csv(data_dir / "m5" / "anomaly_rules.csv", [
         {"rule_id": "R1", "alert_type": "POSITION_MISSING", "condition": "lat或lon为空", "severity": "HIGH"},
         {"rule_id": "R2", "alert_type": "DATA_DELAYED", "condition": "batch_time-record_time>60", "severity": "MEDIUM"},
         {"rule_id": "R3", "alert_type": "DUPLICATE_RECORD", "condition": "target_id和timestamp均相同", "severity": "MEDIUM"},
@@ -161,7 +162,8 @@ def write_reference_outputs(parsed: list[dict[str, object]]) -> None:
     current = build_current_situation(decoded)
     assert len(tracks) == 9 and len(current) == 3 and all(row["track_length"] == 3 for row in current)
     write_csv(checkpoints / "official_current_situation.csv", current)
-    write_csv(STUDENT / "data" / "partner_current_situation.csv", current)
+    (STUDENT / "data" / "m4").mkdir(parents=True, exist_ok=True)
+    write_csv(STUDENT / "data" / "m4" / "partner_current_situation.csv", current)
 
     verified_mapping = [
         {"source_format": "OpenSky", "input_field": "target_id", "unified_field": "track_id", "mapping_rule": "六位小写十六进制字符串", "unit_conversion": "none", "null_strategy": "required", "evidence": "source_field_definitions.md", "verified": True},
@@ -176,7 +178,7 @@ def write_reference_outputs(parsed: list[dict[str, object]]) -> None:
     unified = [map_current_to_unified(row, "TeachingLink") for row in current]
     write_ndjson(checkpoints / "unified_message_reference.ndjson", unified)
 
-    anomaly_rows = _read_csv_typed(STUDENT / "data" / "anomaly_cases.csv")
+    anomaly_rows = _read_csv_typed(STUDENT / "data" / "m5" / "anomaly_cases.csv")
     alerts, quality = check_quality(anomaly_rows)
     write_csv(expected / "expected_alert_log.csv", alerts)
     write_csv(expected / "expected_quality_situation.csv", quality)

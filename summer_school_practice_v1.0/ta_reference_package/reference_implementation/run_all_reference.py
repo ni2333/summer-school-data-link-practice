@@ -129,7 +129,7 @@ def run(student_root: Path, output: Path, use_sqlite: bool) -> dict[str, object]
     verified_mapping = read_csv(ROOT / "ta_reference_package" / "checkpoints" / "official_verified_mapping.csv")
     write_csv(output / "verified_mapping_table.csv", verified_mapping)
 
-    anomaly_rows = typed_anomaly_rows(student_root / "data" / "anomaly_cases.csv")
+    anomaly_rows = typed_anomaly_rows(student_root / "data" / "m5" / "anomaly_cases.csv")
     alerts, quality = check_quality(anomaly_rows)
     write_csv(output / "alert_log.csv", alerts)
     write_csv(output / "quality_situation.csv", quality)

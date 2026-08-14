@@ -57,9 +57,9 @@ def main() -> int:
         actual_current = csv_rows(output / "current_situation.csv")
         official_keys = {(row["target_id"], row["track_length"]) for row in official_current}
         actual_keys = {(row["target_id"], row["track_length"]) for row in actual_current}
-        check("M3官方检查点", official_keys == actual_keys, f"实际={sorted(actual_keys)}")
+        check("M3参考结果核对", official_keys == actual_keys, f"实际={sorted(actual_keys)}")
     except Exception as exc:
-        check("M3官方检查点", False, repr(exc))
+        check("M3参考结果核对", False, repr(exc))
 
     try:
         expected_counts = json.loads((ROOT / "ta_reference_package" / "checkpoints" / "expected_alert_counts.json").read_text(encoding="utf-8"))
@@ -96,7 +96,7 @@ def main() -> int:
         "sqlite_rows": 9 if args.sqlite else None,
     }
     summary_ok = all(summary.get(key) == value for key, value in expected_summary.items())
-    check("冻结指标", summary_ok, json.dumps(summary, ensure_ascii=False, sort_keys=True))
+    check("实验结果指标", summary_ok, json.dumps(summary, ensure_ascii=False, sort_keys=True))
 
     report = {
         "python": sys.version,

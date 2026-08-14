@@ -67,7 +67,7 @@ def read_practice_inputs() -> SmokeResult:
         raw = json.loads((PRACTICE_DATA / "raw_states.json").read_text(encoding="utf-8"))
         sample_size = (PRACTICE_DATA / "partner_messages_sample.bin").stat().st_size
         multitime_size = (PRACTICE_DATA / "partner_messages_multitime.bin").stat().st_size
-        with (PRACTICE_DATA / "anomaly_cases.csv").open("r", encoding="utf-8-sig", newline="") as handle:
+        with (PRACTICE_DATA / "m5" / "anomaly_cases.csv").open("r", encoding="utf-8-sig", newline="") as handle:
             anomaly_rows = list(csv.DictReader(handle))
         unified = json.loads((SCHEMA / "unified_model.json").read_text(encoding="utf-8"))
         passed = (

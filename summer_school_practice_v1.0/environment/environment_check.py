@@ -132,7 +132,7 @@ def check_paths(project_root: Path) -> CheckResult:
         project_root / "student_package" / "data" / "raw_states.json",
         project_root / "student_package" / "data" / "partner_messages_sample.bin",
         project_root / "student_package" / "data" / "partner_messages_multitime.bin",
-        project_root / "student_package" / "data" / "anomaly_cases.csv",
+        project_root / "student_package" / "data" / "m5" / "anomaly_cases.csv",
         project_root / "student_package" / "schema" / "teaching_message_spec.md",
         project_root / "student_package" / "schema" / "unified_model.json",
         project_root / "student_package" / "guides" / "opensky_interface_summary.md",

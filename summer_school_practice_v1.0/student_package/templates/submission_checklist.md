@@ -36,8 +36,18 @@
 
 ## M6
 
-- [ ] 综合运行代码、关键成果和README
+- [ ] `src/`或完成后的`src_skeleton/`
+- [ ] `output/`中的关键成果
+- [ ] `SUBMISSION_README.md`
 - [ ] 不超过5页的成果展示材料
 - [ ] 已记录实验数据量、帧数和解码结果
 - [ ] 所有JSON、CSV和NDJSON均能重新读取
 - [ ] 从空`output`目录能够按README重新运行
+
+## GitHub最终提交
+
+- [ ] 个人私有仓库名称符合`data-link-学号-GitHub用户名`
+- [ ] 必交成果已上传到`main`分支
+- [ ] 仓库中没有`.venv`、密码、令牌和无关的大文件
+- [ ] 已运行`python environment/check_student_submission.py --strict`
+- [ ] 已登记仓库链接和最终commit ID

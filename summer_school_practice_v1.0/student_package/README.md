@@ -58,3 +58,18 @@
 前序结果阻断后续模块时，只有在助教A正式发布后才可按 `templates/checkpoint_switch.md` 使用官方检查点；检查点不能替代本人前序成果。
 
 完整提交项见 `templates/submission_checklist.md`。
+
+## 个人提交
+
+本实践按个人完成、个人提交。每名学生使用一个独立的私有 GitHub 仓库，不要在多人共用仓库中按姓名建立文件夹。
+
+提交前完成以下操作：
+
+1. 将完成后的程序放在 `src/`；如果一直在 `src_skeleton/` 中编写，也可以保留原目录名。
+2. 将程序实际生成的必交结果保存在 `output/`，不要只放截图。
+3. 将流程图、说明和展示材料保存在 `docs/`。
+4. 根据 `templates/m6_README_template.md` 完成根目录下的 `SUBMISSION_README.md`。
+5. 在课程包根目录执行 `.\.venv\Scripts\python.exe environment\check_student_submission.py --strict`，修正所有失败项。
+6. 将最终文件提交并上传到个人仓库的 `main` 分支，在课程指定渠道登记仓库链接和最终 commit ID。
+
+具体操作和文件命名见 `guides/student_submission_guide.md`。

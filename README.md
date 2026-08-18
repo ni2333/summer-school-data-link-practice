@@ -6,6 +6,7 @@
 
 - 环境安装、独立虚拟环境和全量验证：`summer_school_practice_v1.0/environment/README_environment.md`
 - 学生 M1-M6 任务、输入和输出：`summer_school_practice_v1.0/student_package/README.md`
+- 学生个人仓库与最终提交办法：`summer_school_practice_v1.0/student_package/guides/student_submission_guide.md`
 - OpenSky 完整实验：`summer_school_practice_v1.0/experiment/README.md`
 - 参考实现和预期结果：`summer_school_practice_v1.0/ta_reference_package/README.md`
 - 实验改进记录：`summer_school_practice_v1.0/release_notes.md`

@@ -1,0 +1,33 @@
+name: 学生实践检查
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 下载仓库
+        uses: actions/checkout@v4
+
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 检查输入文件
+        run: python summer_school_practice_v1.0/environment/run_smoke_test.py
+
+      - name: 检查Python语法
+        run: python -m compileall -q summer_school_practice_v1.0/student_package
+
+      - name: 显示提交完成度
+        run: python summer_school_practice_v1.0/environment/check_student_submission.py
+
+      - name: 手动触发时执行最终提交检查
+        if: github.event_name == 'workflow_dispatch'
+        run: python summer_school_practice_v1.0/environment/check_student_submission.py --strict

@@ -13,6 +13,7 @@ from build_release_packages import (
 EXCLUDED_PARTS = {".venv", "__pycache__", "dist", "wheelhouse"}
 EXCLUDED_PREFIXES = {
     "experiment/output/",
+    "experiment/rendered_report",
     "student_package/output/",
     "test_records/latest_reference_run/",
     "test_records/.last_trial_output",

@@ -12,13 +12,14 @@ __pycache__/
 .vscode/
 
 # Runtime and temporary outputs
-summer_school_practice_v1.0/student_package/output/
+# 学生的 student_package/output/ 是必交成果，不得忽略。
 summer_school_practice_v1.0/test_records/env_check_*/
 summer_school_practice_v1.0/test_records/.last_trial_output*/
 summer_school_practice_v1.0/test_records/latest_reference_run/
 summer_school_practice_v1.0/test_records/latest_trial_report*.json
 summer_school_practice_v1.0/environment/wheelhouse/
 summer_school_practice_v1.0/dist/
+summer_school_practice_v1.0/experiment/rendered_report*/
 
 # Release archives are published after version freeze
 *.zip

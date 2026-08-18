@@ -7,6 +7,7 @@ environment/setup.ps1,1.0.0-rc7,A,Windows一键部署,true,ready
 environment/setup.sh,1.0.0-rc7,A,Linux/macOS一键部署,true,ready
 environment/environment_check.py,1.0.0-rc7,A,学生/助教双模式环境检查工具,true,ready
 environment/run_smoke_test.py,1.0.0-rc6,A,实验输入与M4候选冒烟测试,true,ready
+environment/check_student_submission.py,1.0.0,A,学生个人提交完整性与格式检查,true,ready
 environment/run_all_checks.py,1.0.0-rc7,A,环境与实验统一检查入口,false,ready
 environment/run_full_trial.py,1.0.0-rc3,A,CSV与SQLite双路径端到端试跑,false,ready
 environment/run_student_checks.py,1.0.0-rc7,A,学生候选包独立检查入口,true,ready
@@ -23,6 +24,8 @@ environment/smoke_data/sample_frame.bin,1.0.0-rc1,A,41字节二进制环境冒�
 environment/smoke_data/sample.csv,1.0.0-rc1,A,CSV环境冒烟样例,true,ready
 environment/smoke_data/sample.ndjson,1.0.0-rc1,A,NDJSON环境冒烟样例,true,ready
 student_package/README.md,1.0.0-rc7,A,M1-M6实验入口与学生自检说明,true,ready
+student_package/docs/README.md,1.0.0,A,学生说明材料命名规则,true,ready
+student_package/output/README.md,1.0.0,A,学生结构化结果目录说明,true,ready
 student_package/data/raw_states.json,1.0.0-rc1,TA,M2离线OpenSky输入,true,ready
 student_package/data/partner_messages_sample.bin,1.0.0-rc1,TA,M2消息样例,true,ready
 student_package/data/partner_messages_multitime.bin,1.0.0-rc1,TA,M3九帧输入,true,ready
@@ -38,6 +41,7 @@ student_package/data/m5/anomaly_cases.csv,1.0.0-rc6,TA,M5混合样例,true,ready
 student_package/data/m5/anomaly_rules.csv,1.0.0-rc6,TA,M5固定规则,true,ready
 student_package/guides/opensky_interface_summary.md,1.0.0-rc1,TA,M1接口资料摘要,true,ready
 student_package/guides/m1_guided_questions.md,1.0.0-rc1,TA,M1引导问题,true,ready
+student_package/guides/student_submission_guide.md,1.0.0,A,学生个人GitHub提交操作说明,true,ready
 student_package/schema/opensky_field_dictionary.csv,1.0.0-rc1,TA,OpenSky字段字典,true,ready
 student_package/schema/teaching_message_spec.md,1.0.0-rc1,TA,41字节教学帧规范,true,ready
 student_package/schema/partner_field_dictionary.csv,1.0.0-rc1,TA,TeachingLink接收字段字典,true,ready
